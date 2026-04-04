@@ -34,11 +34,17 @@ async def analyze_resume(file: UploadFile = File(...)):
 
         # File validation
         if not file.filename.endswith((".pdf", ".txt")):
-            return {"error": "Only PDF or TXT files allowed"}
+            return {
+                "success": False,
+                "error": "Only PDF or TXT files allowed"
+            }
 
         # File size limit (2MB)
         if len(contents) > 2 * 1024 * 1024:
-            return {"error": "File too large"}
+            return {
+                "success": False,
+                "error": "File too large"
+            }
 
         logger.info("Processing resume")
 
@@ -51,7 +57,10 @@ async def analyze_resume(file: UploadFile = File(...)):
             text = contents.decode("utf-8", errors="ignore")
 
         if not text.strip():
-            return {"error": "No text extracted from file"}
+            return {
+                "success": False,
+                "error": "No text extracted from file"
+            }
 
         result = analyzer.analyze_resume(text)
 
