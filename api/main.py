@@ -23,6 +23,19 @@ analyzer = ResumeAnalyzer()
 # Provide alias for the expected method name
 analyzer.analyze_resume = analyzer.analyze_resume_text
 
+
+def error_response(message: str) -> dict:
+    return {
+        "success": False,
+        "error": message
+    }
+
+
+def success_response(payload: dict) -> dict:
+    response = dict(payload)
+    response.setdefault("success", True)
+    return response
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
@@ -34,17 +47,11 @@ async def analyze_resume(file: UploadFile = File(...)):
 
         # File validation
         if not file.filename.endswith((".pdf", ".txt")):
-            return {
-                "success": False,
-                "error": "Only PDF or TXT files allowed"
-            }
+            return error_response("Only PDF or TXT files allowed")
 
         # File size limit (2MB)
         if len(contents) > 2 * 1024 * 1024:
-            return {
-                "success": False,
-                "error": "File too large"
-            }
+            return error_response("File too large")
 
         logger.info("Processing resume")
 
@@ -57,17 +64,17 @@ async def analyze_resume(file: UploadFile = File(...)):
             text = contents.decode("utf-8", errors="ignore")
 
         if not text.strip():
-            return {
-                "success": False,
-                "error": "No text extracted from file"
-            }
+            return error_response("No text extracted from file")
 
         result = analyzer.analyze_resume(text)
 
-        return result
+        if isinstance(result, dict):
+            return success_response(result)
+
+        return {
+            "success": True,
+            "result": result
+        }
 
     except Exception as e:
-        return {
-            "success": False,
-            "error": "Internal processing error"
-        }
+        return error_response(str(e))
