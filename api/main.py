@@ -1,22 +1,24 @@
 from fastapi import FastAPI, UploadFile, File
-from ml.analyzer_pipeline import CompleteResumeAnalysis
+from PyPDF2 import PdfReader
+import io
 
 app = FastAPI()
-analyzer = CompleteResumeAnalysis()
-
-@app.get("/")
-def root():
-    return {"message": "Resume Analyzer API running"}
-
-@app.get("/health")
-def health():
-    return {"status": "ok"}
 
 @app.post("/analyze")
 async def analyze_resume(file: UploadFile = File(...)):
-    content = await file.read()
-    text = content.decode("utf-8")
+    contents = await file.read()
 
-    result = analyzer.analyze_resume_text(text)
-    
+    # Handle PDF files
+    if file.filename.endswith(".pdf"):
+        pdf = PdfReader(io.BytesIO(contents))
+        text = ""
+        for page in pdf.pages:
+            text += page.extract_text() or ""
+    else:
+        # Handle text files
+        text = contents.decode("utf-8", errors="ignore")
+
+    # Call your analyzer
+    result = analyzer.analyze_resume(text)
+
     return result

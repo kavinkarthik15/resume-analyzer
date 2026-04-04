@@ -31,6 +31,12 @@ class ResumeAnalyzerLogger:
             "%(asctime)s - %(levelname)s - %(message)s"
         )
 
+        # Normalize stdout encoding so Unicode characters do not crash logging on Windows
+        try:
+            sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        except Exception:
+            pass
+
         # Console handler (always active)
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(logging.INFO)
@@ -45,7 +51,8 @@ class ResumeAnalyzerLogger:
             file_handler = logging.handlers.RotatingFileHandler(
                 log_dir / "resume_analyzer.log",
                 maxBytes=10*1024*1024,  # 10MB
-                backupCount=5
+                backupCount=5,
+                encoding='utf-8'
             )
             file_handler.setLevel(logging.DEBUG)
             file_handler.setFormatter(detailed_formatter)
@@ -55,7 +62,8 @@ class ResumeAnalyzerLogger:
         error_handler = logging.handlers.RotatingFileHandler(
             log_dir / "errors.log",
             maxBytes=5*1024*1024,  # 5MB
-            backupCount=3
+            backupCount=3,
+            encoding='utf-8'
         )
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(detailed_formatter)
