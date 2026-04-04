@@ -1,0 +1,34 @@
+{
+  "version": "v1",
+  "feature_order": [
+    "ats_score_normalized",
+    "skill_count",
+    "skill_coverage_normalized",
+    "skill_diversity",
+    "skill_diversity_normalized",
+    "sections_completeness",
+    "section_completeness_score",
+    "essential_sections_completeness",
+    "experience_relevance_score",
+    "keyword_match_score",
+    "jd_match_score",
+    "formatting_quality_score",
+    "formatting_issues_count",
+    "bullet_verb_score",
+    "bullet_achievement_score",
+    "bullet_quality_score",
+    "content_length",
+    "word_count",
+    "missing_skills_count",
+    "missing_skills_penalty",
+    "overall_quality_score",
+    "readiness_score"
+  ],
+  "feature_count": 22,
+  "description": "PHASE 15: Feature schema for model validation. Use this to ensure input features match training features.",
+  "validation_rules": {
+    "all_features_required": true,
+    "order_matters": true,
+    "allow_extra_features": false
+  }
+}

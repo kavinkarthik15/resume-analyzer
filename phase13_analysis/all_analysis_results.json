@@ -1,0 +1,828 @@
+{
+  "strong": [
+    {
+      "file": "senior_data_scientist_7years.txt",
+      "category": "strong",
+      "prediction": "strong",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "strong",
+      "raw_prediction": 1,
+      "probabilities": {
+        "weak": 0.0,
+        "strong": 1.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 11,
+        "skill_count": 9,
+        "leadership_score": 3,
+        "achievement_score": 3,
+        "education_score": 3,
+        "project_count": 2,
+        "certification_count": 2
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 3
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 3
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 3
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "senior_devops_6years.txt",
+      "category": "strong",
+      "prediction": "strong",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "strong",
+      "raw_prediction": 1,
+      "probabilities": {
+        "weak": 0.0,
+        "strong": 1.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 9,
+        "skill_count": 8,
+        "leadership_score": 3,
+        "achievement_score": 2,
+        "education_score": 2,
+        "project_count": 1,
+        "certification_count": 4
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 3
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 2
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 2
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "senior_fullstack_6years.txt",
+      "category": "strong",
+      "prediction": "strong",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "strong",
+      "raw_prediction": 1,
+      "probabilities": {
+        "weak": 0.0,
+        "strong": 1.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 9,
+        "skill_count": 21,
+        "leadership_score": 4,
+        "achievement_score": 4,
+        "education_score": 2,
+        "project_count": 1,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 4
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 4
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 2
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "senior_product_manager_7years.txt",
+      "category": "strong",
+      "prediction": "strong",
+      "confidence": 0.988,
+      "confidence_level": "high",
+      "decision": "strong",
+      "raw_prediction": 1,
+      "probabilities": {
+        "weak": 0.012,
+        "strong": 0.988,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 11,
+        "skill_count": 1,
+        "leadership_score": 3,
+        "achievement_score": 4,
+        "education_score": 2,
+        "project_count": 1,
+        "certification_count": 2
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 3
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 4
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 2
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "senior_software_architect_8years.txt",
+      "category": "strong",
+      "prediction": "strong",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "strong",
+      "raw_prediction": 1,
+      "probabilities": {
+        "weak": 0.0,
+        "strong": 1.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 11,
+        "skill_count": 7,
+        "leadership_score": 6,
+        "achievement_score": 2,
+        "education_score": 2,
+        "project_count": 1,
+        "certification_count": 3
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 6
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 2
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 2
+        }
+      ],
+      "success": true
+    }
+  ],
+  "average": [
+    {
+      "file": "business_analyst_5years.txt",
+      "category": "average",
+      "prediction": "weak",
+      "confidence": 0.764,
+      "confidence_level": "high",
+      "decision": "weak",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 0.764,
+        "strong": 0.236,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 7,
+        "skill_count": 4,
+        "leadership_score": 0,
+        "achievement_score": 0,
+        "education_score": 1,
+        "project_count": 2,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 0
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 1
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "frontend_developer_3years.txt",
+      "category": "average",
+      "prediction": "weak",
+      "confidence": 0.564,
+      "confidence_level": "low",
+      "decision": "borderline",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 0.564,
+        "strong": 0.436,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 4,
+        "skill_count": 8,
+        "leadership_score": 0,
+        "achievement_score": 0,
+        "education_score": 1,
+        "project_count": 1,
+        "certification_count": 3
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 0
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 1
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "hr_coordinator_4years.txt",
+      "category": "average",
+      "prediction": "weak",
+      "confidence": 0.56,
+      "confidence_level": "low",
+      "decision": "borderline",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 0.56,
+        "strong": 0.44,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 7,
+        "skill_count": 0,
+        "leadership_score": 1,
+        "achievement_score": 1,
+        "education_score": 2,
+        "project_count": 1,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 1
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 1
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 2
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "marketing_specialist_4years.txt",
+      "category": "average",
+      "prediction": "weak",
+      "confidence": 0.5675,
+      "confidence_level": "low",
+      "decision": "borderline",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 0.5675,
+        "strong": 0.4325,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 7,
+        "skill_count": 2,
+        "leadership_score": 1,
+        "achievement_score": 1,
+        "education_score": 1,
+        "project_count": 1,
+        "certification_count": 3
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 1
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 1
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 1
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "network_admin_6years.txt",
+      "category": "average",
+      "prediction": "strong",
+      "confidence": 0.956,
+      "confidence_level": "high",
+      "decision": "strong",
+      "raw_prediction": 1,
+      "probabilities": {
+        "weak": 0.044,
+        "strong": 0.956,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 5,
+        "skill_count": 2,
+        "leadership_score": 2,
+        "achievement_score": 1,
+        "education_score": 2,
+        "project_count": 2,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 2
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 1
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 2
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "ux_designer_4years.txt",
+      "category": "average",
+      "prediction": "weak",
+      "confidence": 0.56,
+      "confidence_level": "low",
+      "decision": "borderline",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 0.56,
+        "strong": 0.44,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 6,
+        "skill_count": 0,
+        "leadership_score": 0,
+        "achievement_score": 1,
+        "education_score": 2,
+        "project_count": 1,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 0
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 1
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 2
+        }
+      ],
+      "success": true
+    }
+  ],
+  "weak": [
+    {
+      "file": "administrative_assistant_gaps.txt",
+      "category": "weak",
+      "prediction": "strong",
+      "confidence": 0.66,
+      "confidence_level": "low",
+      "decision": "borderline",
+      "raw_prediction": 1,
+      "probabilities": {
+        "weak": 0.34,
+        "strong": 0.66,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 7,
+        "skill_count": 1,
+        "leadership_score": 2,
+        "achievement_score": 0,
+        "education_score": 0,
+        "project_count": 0,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 2
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 0
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "business_grad_limited_experience.txt",
+      "category": "weak",
+      "prediction": "weak",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "weak",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 1.0,
+        "strong": 0.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 4,
+        "skill_count": 0,
+        "leadership_score": 0,
+        "achievement_score": 0,
+        "education_score": 0,
+        "project_count": 0,
+        "certification_count": 1
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 0
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 0
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "entry_level_retail.txt",
+      "category": "weak",
+      "prediction": "weak",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "weak",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 1.0,
+        "strong": 0.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 4,
+        "skill_count": 0,
+        "leadership_score": 0,
+        "achievement_score": 0,
+        "education_score": 0,
+        "project_count": 0,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 0
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 0
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "entry_level_retail_2years.txt",
+      "category": "weak",
+      "prediction": "weak",
+      "confidence": 0.78,
+      "confidence_level": "high",
+      "decision": "weak",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 0.78,
+        "strong": 0.22,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 4,
+        "skill_count": 0,
+        "leadership_score": 1,
+        "achievement_score": 0,
+        "education_score": 0,
+        "project_count": 1,
+        "certification_count": 1
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 1
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 0
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "homemaker_volunteer.txt",
+      "category": "weak",
+      "prediction": "weak",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "weak",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 1.0,
+        "strong": 0.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 5,
+        "skill_count": 0,
+        "leadership_score": 1,
+        "achievement_score": 0,
+        "education_score": 0,
+        "project_count": 0,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 1
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 0
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "recent_grad_no_experience.txt",
+      "category": "weak",
+      "prediction": "weak",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "weak",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 1.0,
+        "strong": 0.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 4,
+        "skill_count": 0,
+        "leadership_score": 1,
+        "achievement_score": 0,
+        "education_score": 0,
+        "project_count": 0,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 1
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 0
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "student_incomplete_education.txt",
+      "category": "weak",
+      "prediction": "weak",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "weak",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 1.0,
+        "strong": 0.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 2,
+        "skill_count": 0,
+        "leadership_score": 0,
+        "achievement_score": 0,
+        "education_score": 0,
+        "project_count": 0,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 0
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 0
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "unemployed_laborer.txt",
+      "category": "weak",
+      "prediction": "weak",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "weak",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 1.0,
+        "strong": 0.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 6,
+        "skill_count": 0,
+        "leadership_score": 0,
+        "achievement_score": 0,
+        "education_score": 0,
+        "project_count": 0,
+        "certification_count": 0
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 0
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 0
+        }
+      ],
+      "success": true
+    },
+    {
+      "file": "warehouse_worker_basic.txt",
+      "category": "weak",
+      "prediction": "weak",
+      "confidence": 1.0,
+      "confidence_level": "high",
+      "decision": "weak",
+      "raw_prediction": 0,
+      "probabilities": {
+        "weak": 1.0,
+        "strong": 0.0,
+        "average": 0.0
+      },
+      "features": {
+        "years_experience": 4,
+        "skill_count": 0,
+        "leadership_score": 0,
+        "achievement_score": 0,
+        "education_score": 0,
+        "project_count": 0,
+        "certification_count": 1
+      },
+      "top_factors": [
+        {
+          "feature": "leadership_score",
+          "importance": 0.4322736082722994,
+          "value": 0
+        },
+        {
+          "feature": "achievement_score",
+          "importance": 0.20167622640346078,
+          "value": 0
+        },
+        {
+          "feature": "education_score",
+          "importance": 0.13056363005955515,
+          "value": 0
+        }
+      ],
+      "success": true
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+Robert Kim
+Business Analyst
+
+EXPERIENCE
+Business Analyst | Consulting Firm | 2020-Present
+- Analyzed business processes and identified improvement opportunities
+- Created reports and dashboards for management
+- Conducted stakeholder interviews and requirements gathering
+- Supported project implementation and user training
+
+Junior Analyst | Financial Services | 2018-2020
+- Assisted with data analysis and reporting
+- Helped with process documentation
+- Participated in system testing and validation
+
+SKILLS
+- SQL, Excel, Tableau
+- Requirements Analysis
+- Process Mapping
+- Stakeholder Management
+- Basic Python
+- Agile Methodology
+
+EDUCATION
+BS Business Administration | University | 2014-2018
+
+PROJECTS
+Process Improvement Initiative | 2021
+- Analyzed workflow inefficiencies
+- Recommended automation solutions
+- Implemented changes saving 15 hours/week

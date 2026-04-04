@@ -1,0 +1,43 @@
+{
+  "total_resumes": 20,
+  "overall_agreement": 0.9,
+  "category_breakdown": {
+    "strong": {
+      "agreement_rate": 1.0,
+      "agreements": 5,
+      "ml_positive_rate": 1.0,
+      "human_positive_rate": 1.0,
+      "total_resumes": 5
+    },
+    "average": {
+      "agreement_rate": 0.8333333333333334,
+      "agreements": 5,
+      "ml_positive_rate": 0.16666666666666666,
+      "human_positive_rate": 0.3333333333333333,
+      "total_resumes": 6
+    },
+    "weak": {
+      "agreement_rate": 0.8888888888888888,
+      "agreements": 8,
+      "ml_positive_rate": 0.1111111111111111,
+      "human_positive_rate": 0.0,
+      "total_resumes": 9
+    }
+  },
+  "ml_accuracy_by_category": {},
+  "human_reliability": {},
+  "error_analysis": {
+    "false_positives": 1,
+    "false_negatives": 1,
+    "false_positive_rate": 0.05,
+    "false_negative_rate": 0.05
+  },
+  "production_readiness": {
+    "overall_agreement_threshold": 0.8,
+    "category_agreement_threshold": 0.7,
+    "overall_pass": true,
+    "category_pass": true,
+    "ready_for_production": true,
+    "recommendations": []
+  }
+}

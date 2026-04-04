@@ -1,0 +1,51 @@
+{
+  "version": "v1",
+  "created": "2026-04-04",
+  "description": "Trained ML model for resume shortlist prediction",
+  "training_metrics": {
+    "accuracy": 0.75,
+    "precision": 0.688,
+    "recall": 0.688,
+    "f1_score": 0.688,
+    "roc_auc": 0.8594,
+    "test_samples": 40,
+    "training_samples": 160
+  },
+  "model_quality": {
+    "rating": "GOOD",
+    "recommendation": "Suitable with monitoring"
+  },
+  "feature_schema": [
+    "ats_score_normalized",
+    "skill_count",
+    "skill_coverage_normalized",
+    "skill_diversity",
+    "skill_diversity_normalized",
+    "sections_completeness",
+    "section_completeness_score",
+    "essential_sections_completeness",
+    "experience_relevance_score",
+    "keyword_match_score",
+    "jd_match_score",
+    "formatting_quality_score",
+    "formatting_issues_count",
+    "bullet_verb_score",
+    "bullet_achievement_score",
+    "bullet_quality_score",
+    "content_length",
+    "word_count",
+    "missing_skills_count",
+    "missing_skills_penalty",
+    "overall_quality_score",
+    "readiness_score"
+  ],
+  "feature_count": 22,
+  "algorithm": "RandomForestClassifier",
+  "hyperparameters": {
+    "n_estimators": 250,
+    "max_depth": 12,
+    "min_samples_split": 6,
+    "random_state": 42
+  },
+  "notes": "PHASE 12 evaluation complete. Model ready for production with real-world validation."
+}

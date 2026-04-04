@@ -1,0 +1,32 @@
+Jane Doe
+Senior Full Stack Developer
+
+EXPERIENCE
+Senior Full Stack Developer | Tech Solutions Inc. | 2018-Present
+- Led development of e-commerce platform serving 500K+ users
+- Architected microservices infrastructure reducing latency by 50%
+- Mentored 8 junior developers and established coding standards
+- Implemented CI/CD pipelines and automated testing
+
+Full Stack Developer | StartupXYZ | 2016-2018
+- Built responsive web applications using React and Node.js
+- Integrated payment gateways and user authentication systems
+- Optimized database queries improving performance by 40%
+
+SKILLS
+- JavaScript, TypeScript, Python
+- React, Vue.js, Node.js, Express
+- PostgreSQL, MongoDB, Redis
+- Docker, Kubernetes, AWS
+- Git, Jenkins, Agile/Scrum
+
+EDUCATION
+BS Computer Science | State University | 2012-2016
+- GPA: 3.7/4.0
+- Computer Science Honor Society
+
+PROJECTS
+Real-time Chat Application | 2021
+- Built scalable chat system handling 10K concurrent users
+- Implemented WebSocket connections and message queuing
+- Used React frontend and Node.js backend with Socket.io

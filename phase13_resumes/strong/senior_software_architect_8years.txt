@@ -1,0 +1,39 @@
+Emily Zhang
+Senior Software Architect
+
+EXPERIENCE
+Senior Software Architect | Enterprise Solutions | 2018-Present
+- Architected enterprise platform serving 1M+ users globally
+- Designed scalable microservices architecture using domain-driven design
+- Led technical strategy and mentored senior developers
+- Established architecture review board and technical standards
+
+Principal Engineer | Tech Giant | 2016-2018
+- Designed high-performance distributed systems
+- Implemented event-driven architecture for real-time processing
+- Collaborated with product teams on technical feasibility
+
+SKILLS
+- System Architecture, Microservices
+- Java, Spring Boot, Python
+- AWS, Kubernetes, Kafka
+- Database Design, API Design
+- Leadership, Technical Strategy
+
+EDUCATION
+MS Software Engineering | Engineering University | 2014-2016
+- Thesis: Scalable Architecture Patterns
+- GPA: 3.9/4.0
+
+BS Computer Science | State University | 2010-2014
+- Summa Cum Laude
+
+CERTIFICATIONS
+- AWS Certified Solutions Architect - Professional
+- Certified Kubernetes Administrator
+
+PROJECTS
+Global Payment Platform | 2021
+- Architected payment processing system handling $10B+ annually
+- Implemented security and compliance standards (PCI DSS)
+- Achieved 99.99% uptime with sub-second response times

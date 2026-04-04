@@ -1,0 +1,14 @@
+
+John Doe
+Software Engineer
+
+Skills:
+- Python, JavaScript, React
+- SQL, Git
+
+Experience:
+- Developer at Company A
+- Built web applications
+
+Education:
+- Bachelor's in CS

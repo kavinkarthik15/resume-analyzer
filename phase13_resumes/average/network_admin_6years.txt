@@ -1,0 +1,31 @@
+Kevin Brown
+Network Administrator
+
+EXPERIENCE
+Network Administrator | IT Services Company | 2018-Present
+- Managed corporate network infrastructure
+- Configured routers, switches, and firewalls
+- Troubleshot network issues and provided technical support
+- Implemented security policies and monitoring
+
+IT Support Specialist | Manufacturing Company | 2016-2018
+- Provided desktop support to 200+ employees
+- Maintained computer systems and software
+- Assisted with network setup and configuration
+
+SKILLS
+- Cisco Networking
+- Windows Server, Linux
+- VMware, Active Directory
+- Firewall Configuration
+- Network Monitoring
+- Troubleshooting
+
+EDUCATION
+AAS Network Administration | Technical College | 2014-2016
+
+PROJECTS
+Network Upgrade Project | 2019
+- Upgraded network infrastructure for 500 users
+- Implemented VLANs and improved security
+- Reduced network downtime by 40%

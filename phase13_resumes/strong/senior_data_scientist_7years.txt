@@ -1,0 +1,39 @@
+Michael Chen
+Senior Data Scientist
+
+EXPERIENCE
+Senior Data Scientist | DataTech Corp | 2017-Present
+- Led ML team developing predictive models for customer churn
+- Built recommendation engine increasing user engagement by 35%
+- Published 5 research papers on deep learning applications
+- Managed data science projects with $2M+ budgets
+
+Data Scientist | Analytics Firm | 2015-2017
+- Developed statistical models for financial forecasting
+- Created automated reporting dashboards using Tableau
+- Conducted A/B testing for marketing campaigns
+
+SKILLS
+- Python, R, SQL
+- TensorFlow, PyTorch, scikit-learn
+- Hadoop, Spark, AWS SageMaker
+- Statistical Analysis, Machine Learning
+- Data Visualization (Tableau, Power BI)
+
+EDUCATION
+MS Data Science | Tech University | 2013-2015
+- Thesis: Deep Learning for Time Series Prediction
+- GPA: 3.8/4.0
+
+PhD Statistics | State University | 2009-2013
+- Research focus: Bayesian inference methods
+
+CERTIFICATIONS
+- AWS Certified Machine Learning - Specialty
+- Google Cloud Professional Data Engineer
+
+PROJECTS
+Fraud Detection System | 2020
+- Built anomaly detection model using autoencoders
+- Reduced false positives by 60% while maintaining accuracy
+- Deployed on AWS with real-time processing

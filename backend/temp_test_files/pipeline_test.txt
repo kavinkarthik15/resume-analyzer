@@ -1,0 +1,15 @@
+
+        John Doe
+        Software Engineer
+
+        Skills:
+        - Python, JavaScript, React
+        - SQL, Git, Docker
+
+        Experience:
+        - Developed web applications
+        - Built REST APIs
+
+        Education:
+        - Bachelor's in Computer Science
+        

@@ -1,0 +1,46 @@
+{
+  "metrics": {
+    "accuracy": 0.75,
+    "precision": 0.6875,
+    "recall": 0.6875,
+    "f1_score": 0.6875,
+    "roc_auc": 0.859375
+  },
+  "confusion_matrix": {
+    "true_negatives": 19,
+    "false_positives": 5,
+    "false_negatives": 5,
+    "true_positives": 11
+  },
+  "feature_importance": {
+    "overall_quality_score": 0.22583972331204286,
+    "readiness_score": 0.15727225175127932,
+    "jd_match_score": 0.09114626404822107,
+    "skill_coverage_normalized": 0.07636143199541512,
+    "ats_score_normalized": 0.07088726673744537,
+    "skill_count": 0.0699279552126261,
+    "bullet_quality_score": 0.04526898843869023,
+    "bullet_verb_score": 0.043254913767612035,
+    "formatting_quality_score": 0.03859106365815847,
+    "word_count": 0.02826495681796251,
+    "experience_relevance_score": 0.020538302019464345,
+    "keyword_match_score": 0.018919227091061176,
+    "content_length": 0.01856187067519988,
+    "section_completeness_score": 0.018300045362861662,
+    "bullet_achievement_score": 0.015400957362256473,
+    "skill_diversity_normalized": 0.011914988460990213,
+    "skill_diversity": 0.01079953521101747,
+    "formatting_issues_count": 0.009522979778736337,
+    "missing_skills_penalty": 0.009296243774182866,
+    "sections_completeness": 0.007834826522513416,
+    "missing_skills_count": 0.007324096732538881,
+    "essential_sections_completeness": 0.0047721112697243885
+  },
+  "model_quality_assessment": {
+    "average_score": 0.703125,
+    "rating": "FAIR",
+    "recommendation": "Needs more training data or feature engineering"
+  },
+  "test_set_size": 40,
+  "training_set_size": 160
+}

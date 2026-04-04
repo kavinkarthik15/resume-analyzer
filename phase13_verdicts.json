@@ -1,0 +1,168 @@
+{
+  "strong": [
+    {
+      "file": "senior_data_scientist_7years.txt",
+      "category": "strong",
+      "verdict": "YES",
+      "confidence": 0.9,
+      "recruiter_notes": "Strong 7+ years experience, leadership role, technical expertise demonstrated",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "senior_devops_6years.txt",
+      "category": "strong",
+      "verdict": "YES",
+      "confidence": 0.9,
+      "recruiter_notes": "Strong 6+ years experience, leadership role, technical expertise demonstrated",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "senior_fullstack_6years.txt",
+      "category": "strong",
+      "verdict": "YES",
+      "confidence": 0.9,
+      "recruiter_notes": "Strong 6+ years experience, leadership role, technical expertise demonstrated",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "senior_product_manager_7years.txt",
+      "category": "strong",
+      "verdict": "YES",
+      "confidence": 0.9,
+      "recruiter_notes": "Strong 7+ years experience, leadership role, technical expertise demonstrated",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "senior_software_architect_8years.txt",
+      "category": "strong",
+      "verdict": "YES",
+      "confidence": 0.9,
+      "recruiter_notes": "Strong 7+ years experience, leadership role, technical expertise demonstrated",
+      "recruiter_id": "simulated_recruiter_001"
+    }
+  ],
+  "average": [
+    {
+      "file": "business_analyst_5years.txt",
+      "category": "average",
+      "verdict": "YES",
+      "confidence": 0.7,
+      "recruiter_notes": "Solid experience (5 years), relevant skills, good potential",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "frontend_developer_3years.txt",
+      "category": "average",
+      "verdict": "NO",
+      "confidence": 0.6,
+      "recruiter_notes": "Limited experience (3 years), basic skills, needs development",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "hr_coordinator_4years.txt",
+      "category": "average",
+      "verdict": "NO",
+      "confidence": 0.6,
+      "recruiter_notes": "Limited experience (4 years), basic skills, needs development",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "marketing_specialist_4years.txt",
+      "category": "average",
+      "verdict": "NO",
+      "confidence": 0.6,
+      "recruiter_notes": "Limited experience (4 years), basic skills, needs development",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "network_admin_6years.txt",
+      "category": "average",
+      "verdict": "YES",
+      "confidence": 0.7,
+      "recruiter_notes": "Solid experience (6 years), relevant skills, good potential",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "ux_designer_4years.txt",
+      "category": "average",
+      "verdict": "NO",
+      "confidence": 0.6,
+      "recruiter_notes": "Limited experience (4 years), basic skills, needs development",
+      "recruiter_id": "simulated_recruiter_001"
+    }
+  ],
+  "weak": [
+    {
+      "file": "administrative_assistant_gaps.txt",
+      "category": "weak",
+      "verdict": "NO",
+      "confidence": 0.85,
+      "recruiter_notes": "Entry level, limited/no experience, basic education, employment gaps",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "business_grad_limited_experience.txt",
+      "category": "weak",
+      "verdict": "NO",
+      "confidence": 0.85,
+      "recruiter_notes": "Entry level, limited/no experience, basic education, employment gaps",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "entry_level_retail.txt",
+      "category": "weak",
+      "verdict": "NO",
+      "confidence": 0.85,
+      "recruiter_notes": "Entry level, limited/no experience, basic education, employment gaps",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "entry_level_retail_2years.txt",
+      "category": "weak",
+      "verdict": "NO",
+      "confidence": 0.85,
+      "recruiter_notes": "Entry level, limited/no experience, basic education, employment gaps",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "homemaker_volunteer.txt",
+      "category": "weak",
+      "verdict": "NO",
+      "confidence": 0.85,
+      "recruiter_notes": "Entry level, limited/no experience, basic education, employment gaps",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "recent_grad_no_experience.txt",
+      "category": "weak",
+      "verdict": "NO",
+      "confidence": 0.85,
+      "recruiter_notes": "Entry level, limited/no experience, basic education, employment gaps",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "student_incomplete_education.txt",
+      "category": "weak",
+      "verdict": "NO",
+      "confidence": 0.85,
+      "recruiter_notes": "Entry level, limited/no experience, basic education, employment gaps",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "unemployed_laborer.txt",
+      "category": "weak",
+      "verdict": "NO",
+      "confidence": 0.85,
+      "recruiter_notes": "Entry level, limited/no experience, basic education, employment gaps",
+      "recruiter_id": "simulated_recruiter_001"
+    },
+    {
+      "file": "warehouse_worker_basic.txt",
+      "category": "weak",
+      "verdict": "NO",
+      "confidence": 0.85,
+      "recruiter_notes": "Entry level, limited/no experience, basic education, employment gaps",
+      "recruiter_id": "simulated_recruiter_001"
+    }
+  ]
+}
