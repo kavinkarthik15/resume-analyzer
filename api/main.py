@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from PyPDF2 import PdfReader
 import io
 import logging
+from typing import Any
 
 from ml.analyzer_pipeline import CompleteResumeAnalysis as ResumeAnalyzer
 
@@ -31,8 +32,19 @@ def error_response(message: str) -> dict:
     }
 
 
+def compute_score_from_confidence(confidence: Any) -> int:
+    try:
+        confidence_value = float(confidence)
+    except (TypeError, ValueError):
+        confidence_value = 0.0
+
+    confidence_value = max(0.0, min(1.0, confidence_value))
+    return int(confidence_value * 100)
+
+
 def success_response(payload: dict) -> dict:
     response = dict(payload)
+    response["score"] = compute_score_from_confidence(response.get("confidence", 0.0))
     response.setdefault("success", True)
     return response
 
