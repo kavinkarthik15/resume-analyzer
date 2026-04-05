@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const rawApiUrl = import.meta.env.VITE_API_URL || 'https://resume-analyzer-nvqc.onrender.com'
 const apiRoot = rawApiUrl.replace(/\/+$|\/api$/g, '').replace(/\/api$/g, '')
-export const API_BASE_URL = `${apiRoot}/api`
+export const API_BASE_URL = apiRoot
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -41,7 +41,7 @@ export const resumeAPI = {
     if (jdText) {
       formData.append('jd_text', jdText);
     }
-    return api.post('/upload-analyze', formData, {
+    return api.post('/analyze', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
