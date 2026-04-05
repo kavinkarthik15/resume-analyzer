@@ -1,4 +1,4 @@
-Folder PATH listing for volume Geonix PowerShell AL1 - PHDD
+﻿Folder PATH listing for volume Geonix PowerShell AL1 - PHDD
 Volume serial number is 6A2F-137F
 E:.
 |   .gitignore
@@ -14601,6 +14601,7 @@ E:.
 |   |   
 |   +---dist
 |   |   |   index.html
+|   |   |   _redirects
 |   |   |   
 |   |   \---assets
 |   |           index-6uSNaD7M.js
@@ -18690,6 +18691,9 @@ E:.
 |   |           README.md
 |   |           yallist.js
 |   |           
+|   +---public
+|   |       _redirects
+|   |       
 |   \---src
 |       |   App.jsx
 |       |   index.css
