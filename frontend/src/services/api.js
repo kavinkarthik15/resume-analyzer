@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const rawApiUrl = import.meta.env.VITE_API_URL || 'https://resume-analyzer-nvqc.onrender.com'
 const apiRoot = rawApiUrl.replace(/\/+$|\/api$/g, '').replace(/\/api$/g, '')
 export const API_BASE_URL = `${apiRoot}/api`
 
