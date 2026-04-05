@@ -8,7 +8,7 @@ import tempfile
 from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, File, HTTPException, UploadFile, Body
+from fastapi import APIRouter, File, HTTPException, UploadFile, Body, Form
 
 from ..models.api_models import (
     ResumeAnalysisResponse,
@@ -30,7 +30,7 @@ analyzer = CompleteResumeAnalysis()
 @router.post("/analyze", response_model=ResumeAnalysisResponse)
 async def upload_and_analyze_resume(
     file: UploadFile = File(...),
-    job_description: Optional[str] = Body(None, description="Optional job description for comparison")
+    job_description: Optional[str] = Form(None, description="Optional job description for comparison")
 ) -> ResumeAnalysisResponse:
     """
     STEP 7: Upload and analyze resume

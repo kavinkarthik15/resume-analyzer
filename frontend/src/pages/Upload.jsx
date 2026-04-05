@@ -5,6 +5,7 @@ import { resumeAPI } from '../services/api';
 export default function Upload() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState('');
+  const [jobDescription, setJobDescription] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export default function Upload() {
     setError('');
 
     try {
-      const response = await resumeAPI.uploadAndAnalyze(file);
+      const response = await resumeAPI.uploadAndAnalyze(file, jobDescription.trim() || null);
       const result = response.data;
 
       // Store result in localStorage for the results page
@@ -90,6 +91,32 @@ export default function Upload() {
             ⚠️ {error}
           </div>
         )}
+
+        <div style={{ marginBottom: '16px' }}>
+          <label htmlFor="job-description" style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>
+            Job Description
+          </label>
+          <textarea
+            id="job-description"
+            value={jobDescription}
+            onChange={(e) => setJobDescription(e.target.value)}
+            placeholder="Paste Job Description here..."
+            rows={6}
+            style={{
+              width: '100%',
+              padding: '12px',
+              borderRadius: '8px',
+              border: '1px solid #d1d5db',
+              background: '#fff',
+              color: '#111827',
+              resize: 'vertical',
+              marginBottom: '8px'
+            }}
+          />
+          <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>
+            Paste a job description to compare it against your resume.
+          </p>
+        </div>
 
         <form onSubmit={handleAnalyze}>
           <div className="file-input-container">

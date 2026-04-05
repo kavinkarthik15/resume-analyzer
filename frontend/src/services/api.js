@@ -35,11 +35,11 @@ api.interceptors.response.use(
 
 export const resumeAPI = {
   // Upload and analyze resume
-  uploadAndAnalyze: (file, jdText = null) => {
+  uploadAndAnalyze: (file, jobDescription = null) => {
     const formData = new FormData();
     formData.append('file', file);
-    if (jdText) {
-      formData.append('jd_text', jdText);
+    if (jobDescription) {
+      formData.append('job_description', jobDescription);
     }
     return api.post('/analyze', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
