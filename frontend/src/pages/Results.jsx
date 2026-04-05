@@ -191,9 +191,11 @@ export default function Results() {
         </div>
 
         {!analysisResult ? (
-          <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl p-6">
-            <p className="text-slate-200">No analysis data found. Please upload a resume from the home page.</p>
-            <Link to="/resume-analysis" className="btn primary mt-4">Upload Resume</Link>
+          <div className="rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/30 backdrop-blur-xl p-8 text-center">
+            <div className="text-5xl mb-4">📄</div>
+            <p className="text-slate-300 text-lg mb-2">No resume uploaded yet</p>
+            <p className="text-slate-400 mb-6">Upload your resume to get AI-powered analysis and improve your ATS score</p>
+            <Link to="/resume-analysis" className="btn primary">Upload Your Resume</Link>
           </div>
         ) : (
           <div className="results-content">

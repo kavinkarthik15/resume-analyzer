@@ -20,8 +20,25 @@ export default function Upload() {
 
   async function handleAnalyze(e) {
     e.preventDefault();
+    
+    // Validation: File required
     if (!file) {
-      setError('Please select a file first');
+      setError('Please select a resume file to upload.');
+      return;
+    }
+    
+    // Validation: File size (2MB limit)
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    if (file.size > maxSize) {
+      setError(`File size must be under 2MB. Your file is ${(file.size / 1024 / 1024).toFixed(1)}MB.`);
+      return;
+    }
+    
+    // Validation: File type
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const extension = file.name.split('.').pop().toLowerCase();
+    if (!allowedTypes.includes(file.type) && !['pdf', 'doc', 'docx'].includes(extension)) {
+      setError('Please upload a PDF or Word document (.pdf, .doc, .docx)');
       return;
     }
 
@@ -39,7 +56,17 @@ export default function Upload() {
       navigate('/results');
     } catch (err) {
       console.error('Analysis failed:', err);
-      setError(err.response?.data?.detail || 'Analysis failed. Please try again.');
+      
+      let errorMsg = 'Analysis failed. Please try again.';
+      if (err.message === 'Network Error' || err.code === 'ECONNABORTED') {
+        errorMsg = 'Server is waking up, please wait a few seconds and try again.';
+      } else if (err.response?.status === 404) {
+        errorMsg = 'Backend service is initializing. Please wait a moment and try again.';
+      } else if (err.response?.data?.detail) {
+        errorMsg = err.response.data.detail;
+      }
+      
+      setError(errorMsg);
     } finally {
       setIsAnalyzing(false);
     }
@@ -118,6 +145,9 @@ export default function Upload() {
         </form>
 
         <div className="upload-info" style={{ marginTop: '24px', fontSize: '14px', color: '#6b7280' }}>
+          <p style={{ marginBottom: '12px', fontSize: '12px', color: '#9ca3af', fontStyle: 'italic' }}>
+            💡 <strong>Tip:</strong> Upload a real resume with skills, projects, and experience for best results. File size must be under 2MB.
+          </p>
           <p><strong>What happens next?</strong></p>
           <ul style={{ paddingLeft: '20px', lineHeight: '1.6' }}>
             <li>AI analyzes your resume content and structure</li>

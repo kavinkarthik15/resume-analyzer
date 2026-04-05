@@ -125,7 +125,16 @@ export default function Landing(){
         sessionStorage.setItem('resumeAnalysis', JSON.stringify(analysisData))
         navigate('/results', { state: { analysisResult: analysisData } })
       } catch (error) {
-        const message = error.response?.data?.detail || error.message || 'Something went wrong while analyzing resume.'
+        let message = 'Something went wrong. Please try again.';
+        
+        if (error.message === 'Network Error' || error.code === 'ECONNABORTED') {
+          message = 'Server is waking up, please wait a few seconds and try again.';
+        } else if (error.response?.status === 404) {
+          message = 'Backend service is initializing. Please wait a moment and try again.';
+        } else if (error.response?.data?.detail) {
+          message = error.response.data.detail;
+        }
+        
         setErrorMessage(message)
       } finally {
         setIsAnalyzing(false)
