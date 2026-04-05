@@ -75,4 +75,8 @@ export const mlAPI = {
   predict: (request) => api.post('/predict', request),
 };
 
+export const rewriteAPI = {
+  rewriteResume: (text) => api.post('/rewrite', { text }),
+};
+
 export default api;
