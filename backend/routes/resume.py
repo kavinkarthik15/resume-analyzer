@@ -33,13 +33,24 @@ COMMON_SKILLS = [
     "javascript", "html", "css", "git"
 ]
 
+SYNONYMS = {
+    "js": "javascript",
+    "javascript": "javascript",
+    "nodejs": "node",
+    "node.js": "node",
+    "reactjs": "react",
+    "react.js": "react",
+    "ml": "machine learning",
+    "ai": "machine learning",
+}
+
 STOPWORDS = {
     "and", "or", "the", "a", "an", "with", "to", "for", "in", "on", "of"
 }
 
 
 def extract_keywords(text: str):
-    text = text.lower()
+    text = normalize_text(text)
     return [
         skill for skill in COMMON_SKILLS
         if _skill_in_text(skill, text)
@@ -47,8 +58,17 @@ def extract_keywords(text: str):
 
 
 def extract_resume_skills(text: str):
-    text = text.lower()
+    text = normalize_text(text)
     return [skill for skill in COMMON_SKILLS if _skill_in_text(skill, text)]
+
+
+def normalize_text(text: str):
+    text = text.lower()
+
+    for key, value in sorted(SYNONYMS.items(), key=lambda item: len(item[0]), reverse=True):
+        text = re.sub(rf"\b{re.escape(key)}\b", value, text)
+
+    return text
 
 
 def _skill_in_text(skill: str, text: str) -> bool:
@@ -59,6 +79,9 @@ def _skill_in_text(skill: str, text: str) -> bool:
 
 
 def match_resume_to_jd(resume_text: str, jd_text: str):
+    resume_text = normalize_text(resume_text)
+    jd_text = normalize_text(jd_text)
+
     jd_keywords = extract_keywords(jd_text)
     resume_skills = extract_resume_skills(resume_text)
 
