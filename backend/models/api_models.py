@@ -39,6 +39,8 @@ class ResumeAnalysisResponse(BaseModel):
     # ATS analysis
     ats_analysis: Dict[str, Any] = Field(default_factory=dict, description="ATS scoring analysis")
 
+        verdict: str = Field("Low Match", description="Human-readable match verdict")
+        job_description_provided: bool = Field(False, description="Whether a job description was provided")
     # Chat context
     chat_ready: bool = Field(False, description="Whether chat is ready")
     chat_context_summary: str = Field("", description="Chat context summary")

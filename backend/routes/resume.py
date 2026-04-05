@@ -32,6 +32,7 @@ COMMON_SKILLS = [
     "aws", "excel", "pandas", "machine learning",
     "javascript", "html", "css", "git"
 ]
+PRIORITY_SKILLS = ["python", "sql", "react", "aws", "docker"]
 
 SYNONYMS = {
     "js": "javascript",
@@ -45,6 +46,19 @@ SYNONYMS = {
 }
 
 STOPWORDS = {
+
+def prioritize_missing(missing_skills):
+    priority = [skill for skill in PRIORITY_SKILLS if skill in missing_skills]
+    others = [skill for skill in missing_skills if skill not in priority]
+    return priority + others
+
+
+def get_verdict(score):
+    if score >= 75:
+        return "Strong Match"
+    if score >= 50:
+        return "Moderate Match"
+    return "Low Match"
     "and", "or", "the", "a", "an", "with", "to", "for", "in", "on", "of"
 }
 
@@ -54,7 +68,7 @@ def extract_keywords(text: str):
     return [
         skill for skill in COMMON_SKILLS
         if _skill_in_text(skill, text)
-    ]
+    missing = prioritize_missing([keyword for keyword in jd_keywords if keyword not in resume_skills])[:5]
 
 
 def extract_resume_skills(text: str):
@@ -64,6 +78,7 @@ def extract_resume_skills(text: str):
 
 def normalize_text(text: str):
     text = text.lower()
+        "verdict": get_verdict(score),
 
     for key, value in sorted(SYNONYMS.items(), key=lambda item: len(item[0]), reverse=True):
         text = re.sub(rf"\b{re.escape(key)}\b", value, text)
@@ -109,6 +124,7 @@ def generate_suggestions(missing_skills):
 
     if not missing_skills:
         suggestions.append("Great match! Consider improving formatting and clarity.")
+            result["verdict"] = match_result["verdict"]
 
     return suggestions
 
@@ -116,6 +132,7 @@ def generate_suggestions(missing_skills):
 def calculate_match_score(matched, jd_keywords):
     if not jd_keywords:
         return 0
+            result["verdict"] = "Low Match"
 
     base_score = (len(matched) / len(jd_keywords)) * 100
 

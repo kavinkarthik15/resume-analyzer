@@ -7,6 +7,12 @@ function getScoreColor(score) {
   return '#ef4444'
 }
 
+function getScoreBarColor(score) {
+  if (score >= 75) return 'linear-gradient(90deg, #22c55e, #16a34a)'
+  if (score >= 50) return 'linear-gradient(90deg, #f59e0b, #ea580c)'
+  return 'linear-gradient(90deg, #ef4444, #dc2626)'
+}
+
 function SectionCard({ title, children, tone = 'default' }) {
   const toneClasses =
     tone === 'success'
@@ -45,10 +51,13 @@ export default function Results() {
 
   const matchScore = analysisResult?.match_score ?? analysisResult?.ats_analysis?.score ?? 0
   const confidence = analysisResult?.confidence || 'Low'
+  const verdict = analysisResult?.verdict || 'Low Match'
+  const jobDescriptionProvided = analysisResult?.job_description_provided ?? false
   const matchedSkills = analysisResult?.matched_skills || []
   const missingSkills = analysisResult?.missing_skills || analysisResult?.ats_analysis?.missing_skills || []
   const suggestions = analysisResult?.suggestions || analysisResult?.ats_analysis?.improvement_tips || []
   const scoreColor = getScoreColor(matchScore)
+  const scoreBarColor = getScoreBarColor(matchScore)
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#07102a] via-[#0f2b4f] to-[#0b0620] text-white pt-20 px-6 pb-10">
@@ -77,6 +86,7 @@ export default function Results() {
                   <h2 className="text-4xl sm:text-5xl font-extrabold" style={{ color: scoreColor }}>
                     Match Score: {matchScore}%
                   </h2>
+                  <h3 className="mt-2 text-2xl font-bold text-white">{verdict}</h3>
                   <p className="mt-2 text-slate-300">
                     Confidence: <span className="font-semibold text-white">{confidence}</span>
                   </p>
@@ -85,7 +95,24 @@ export default function Results() {
                   Higher scores mean stronger alignment between your resume and the job description.
                 </div>
               </div>
+
+              <div className="mt-6">
+                <div className="h-3 w-full rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full"
+                    style={{ width: `${matchScore}%`, background: scoreBarColor }}
+                  />
+                </div>
+              </div>
             </SectionCard>
+
+            {!jobDescriptionProvided && (
+              <SectionCard title="Job Description Needed" tone="accent">
+                <p className="text-slate-200">
+                  Upload a job description to get a personalized match analysis.
+                </p>
+              </SectionCard>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <SectionCard title="Matched Skills" tone="success">
@@ -132,6 +159,23 @@ export default function Results() {
               ) : (
                 <p className="text-slate-300">Upload a resume and job description to see improvement suggestions.</p>
               )}
+            </SectionCard>
+
+            <SectionCard title="Tips to Improve" tone="accent">
+              <ul className="space-y-3 text-slate-200">
+                <li className="flex items-start gap-3">
+                  <span className="text-cyan-300">→</span>
+                  <span>Use exact skill keywords from the job description.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-cyan-300">→</span>
+                  <span>Add measurable achievements to show impact.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-cyan-300">→</span>
+                  <span>Include relevant tools and technologies from your target role.</span>
+                </li>
+              </ul>
             </SectionCard>
           </div>
         )}
