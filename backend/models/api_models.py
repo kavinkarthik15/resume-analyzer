@@ -28,6 +28,7 @@ class ResumeAnalysisResponse(BaseModel):
 
     # Job match results
     match_score: int = Field(0, description="Resume vs job description match score")
+    confidence: str = Field("Low", description="Match confidence level")
     matched_skills: List[str] = Field(default_factory=list, description="Matched skills")
     missing_skills: List[str] = Field(default_factory=list, description="Missing skills")
     suggestions: List[str] = Field(default_factory=list, description="Match suggestions")

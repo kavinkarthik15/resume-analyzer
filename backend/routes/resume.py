@@ -40,17 +40,22 @@ STOPWORDS = {
 
 def extract_keywords(text: str):
     text = text.lower()
-    words = re.findall(r'\b[a-zA-Z]+\b', text)
-
-    return list(set([
-        word for word in words
-        if word not in STOPWORDS and len(word) > 2
-    ]))
+    return [
+        skill for skill in COMMON_SKILLS
+        if _skill_in_text(skill, text)
+    ]
 
 
 def extract_resume_skills(text: str):
     text = text.lower()
-    return [skill for skill in COMMON_SKILLS if skill in text]
+    return [skill for skill in COMMON_SKILLS if _skill_in_text(skill, text)]
+
+
+def _skill_in_text(skill: str, text: str) -> bool:
+    if " " in skill:
+        return skill in text
+
+    return re.search(rf"\b{re.escape(skill)}\b", text) is not None
 
 
 def match_resume_to_jd(resume_text: str, jd_text: str):
@@ -58,22 +63,43 @@ def match_resume_to_jd(resume_text: str, jd_text: str):
     resume_skills = extract_resume_skills(resume_text)
 
     matched = [skill for skill in resume_skills if skill in jd_keywords]
-    missing = [keyword for keyword in jd_keywords if keyword not in resume_skills]
+    missing = [keyword for keyword in jd_keywords if keyword not in resume_skills][:5]
 
-    score = int((len(matched) / len(jd_keywords)) * 100) if jd_keywords else 0
+    score = calculate_match_score(matched, jd_keywords)
+    confidence = "High" if len(matched) >= 4 else "Medium" if len(matched) >= 2 else "Low"
 
     return {
         "match_score": score,
         "matched_skills": matched,
-        "missing_skills": missing[:10],
+        "missing_skills": missing,
+        "confidence": confidence,
     }
 
 
 def generate_suggestions(missing_skills):
-    return [
-        f"Consider adding {skill} to your resume"
-        for skill in missing_skills[:5]
-    ]
+    suggestions = []
+
+    for skill in missing_skills:
+        suggestions.append(
+            f"Add {skill} experience or projects to better match the job description"
+        )
+
+    if not missing_skills:
+        suggestions.append("Great match! Consider improving formatting and clarity.")
+
+    return suggestions
+
+
+def calculate_match_score(matched, jd_keywords):
+    if not jd_keywords:
+        return 0
+
+    base_score = (len(matched) / len(jd_keywords)) * 100
+
+    if len(matched) >= 3:
+        base_score += 10
+
+    return min(int(base_score), 100)
 
 
 @router.post("/analyze", response_model=ResumeAnalysisResponse)
@@ -118,12 +144,14 @@ async def upload_and_analyze_resume(
             result["matched_skills"] = match_result["matched_skills"]
             result["missing_skills"] = match_result["missing_skills"]
             result["suggestions"] = generate_suggestions(match_result["missing_skills"])
+            result["confidence"] = match_result["confidence"]
         else:
             result["success"] = True
             result["match_score"] = 0
             result["matched_skills"] = []
             result["missing_skills"] = []
             result["suggestions"] = []
+            result["confidence"] = "Low"
 
         # Clean up temp file
         os.unlink(temp_file_path)
