@@ -27,7 +27,7 @@ router = APIRouter()
 analyzer = CompleteResumeAnalysis()
 
 
-@router.post("/upload-analyze", response_model=ResumeAnalysisResponse)
+@router.post("/analyze", response_model=ResumeAnalysisResponse)
 async def upload_and_analyze_resume(
     file: UploadFile = File(...),
     job_description: Optional[str] = Body(None, description="Optional job description for comparison")
