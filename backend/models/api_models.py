@@ -20,10 +20,17 @@ class ResumeUploadRequest(BaseModel):
 
 class ResumeAnalysisResponse(BaseModel):
     """Complete resume analysis response"""
+    success: bool = Field(True, description="Whether the analysis completed successfully")
     status: str = Field(..., description="Analysis status: success, partial, failed")
     message: Optional[str] = Field(None, description="Human-readable status message")
     resume_id: Optional[int] = Field(None, description="Database resume ID")
     analysis_id: Optional[int] = Field(None, description="Database analysis ID")
+
+    # Job match results
+    match_score: int = Field(0, description="Resume vs job description match score")
+    matched_skills: List[str] = Field(default_factory=list, description="Matched skills")
+    missing_skills: List[str] = Field(default_factory=list, description="Missing skills")
+    suggestions: List[str] = Field(default_factory=list, description="Match suggestions")
 
     # Parsing results
     parsing: Dict[str, Any] = Field(default_factory=dict, description="Resume parsing results")

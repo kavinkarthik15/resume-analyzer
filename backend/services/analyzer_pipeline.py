@@ -175,6 +175,7 @@ class CompleteResumeAnalysis:
                 "status": "success" if validation["valid"] else "warnings",
                 "resume_id": resume_id,
                 "analysis_id": analysis_id,
+                "raw_text": parsed.raw_text,
 
                 # Phase 6 Results
                 "parsing": {

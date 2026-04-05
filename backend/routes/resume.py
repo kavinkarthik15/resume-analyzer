@@ -3,6 +3,7 @@ STEP 7: Resume API Routes
 FastAPI routes for resume analysis using the integrated pipeline
 """
 
+import re
 import os
 import tempfile
 from pathlib import Path
@@ -25,6 +26,54 @@ router = APIRouter()
 
 # Initialize the analyzer (single entry point for all operations)
 analyzer = CompleteResumeAnalysis()
+
+COMMON_SKILLS = [
+    "python", "java", "sql", "react", "node", "docker",
+    "aws", "excel", "pandas", "machine learning",
+    "javascript", "html", "css", "git"
+]
+
+STOPWORDS = {
+    "and", "or", "the", "a", "an", "with", "to", "for", "in", "on", "of"
+}
+
+
+def extract_keywords(text: str):
+    text = text.lower()
+    words = re.findall(r'\b[a-zA-Z]+\b', text)
+
+    return list(set([
+        word for word in words
+        if word not in STOPWORDS and len(word) > 2
+    ]))
+
+
+def extract_resume_skills(text: str):
+    text = text.lower()
+    return [skill for skill in COMMON_SKILLS if skill in text]
+
+
+def match_resume_to_jd(resume_text: str, jd_text: str):
+    jd_keywords = extract_keywords(jd_text)
+    resume_skills = extract_resume_skills(resume_text)
+
+    matched = [skill for skill in resume_skills if skill in jd_keywords]
+    missing = [keyword for keyword in jd_keywords if keyword not in resume_skills]
+
+    score = int((len(matched) / len(jd_keywords)) * 100) if jd_keywords else 0
+
+    return {
+        "match_score": score,
+        "matched_skills": matched,
+        "missing_skills": missing[:10],
+    }
+
+
+def generate_suggestions(missing_skills):
+    return [
+        f"Consider adding {skill} to your resume"
+        for skill in missing_skills[:5]
+    ]
 
 
 @router.post("/analyze", response_model=ResumeAnalysisResponse)
@@ -60,6 +109,21 @@ async def upload_and_analyze_resume(
 
         # Run complete analysis using the integrated pipeline
         result = analyzer.analyze_resume_complete(temp_file_path, job_description)
+
+        if job_description:
+            resume_text = result.get("raw_text", "")
+            match_result = match_resume_to_jd(resume_text, job_description)
+            result["success"] = True
+            result["match_score"] = match_result["match_score"]
+            result["matched_skills"] = match_result["matched_skills"]
+            result["missing_skills"] = match_result["missing_skills"]
+            result["suggestions"] = generate_suggestions(match_result["missing_skills"])
+        else:
+            result["success"] = True
+            result["match_score"] = 0
+            result["matched_skills"] = []
+            result["missing_skills"] = []
+            result["suggestions"] = []
 
         # Clean up temp file
         os.unlink(temp_file_path)
