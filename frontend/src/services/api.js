@@ -1,8 +1,14 @@
 import axios from 'axios';
 
-const rawApiUrl = import.meta.env.VITE_API_URL || 'https://resume-analyzer-nvqc.onrender.com'
-const apiRoot = rawApiUrl.replace(/\/+$|\/api$/g, '').replace(/\/api$/g, '')
-export const API_BASE_URL = apiRoot
+const rawApiUrl =
+  import.meta.env.VITE_API_URL ||
+  'https://resume-analyzer-nvqc.onrender.com';
+
+const apiRoot = rawApiUrl
+  .replace(/\/+$/, '')
+  .replace(/\/api$/, '');
+
+export const API_BASE_URL = apiRoot;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
