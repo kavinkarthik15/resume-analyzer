@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AlertCircle, CheckCircle2, Upload as UploadIcon } from 'lucide-react';
 import { resumeAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useAnalysis } from '../context/AnalysisContext';
 
 export default function Upload() {
   const [file, setFile] = useState(null);
@@ -11,6 +12,7 @@ export default function Upload() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState('');
   const { user } = useAuth();
+  const { setAnalysisResult } = useAnalysis();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +67,7 @@ export default function Upload() {
 
       // Store result in localStorage for the results page
       localStorage.setItem('analysisResult', JSON.stringify(result));
+      setAnalysisResult(result);
 
       // Navigate to results page
       navigate('/results');

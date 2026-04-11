@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { resumeAPI } from '../services/api'
+import { useAnalysis } from '../context/AnalysisContext'
 
 /* ── Health Score Gauge ─────────────────────────────────────────────────────── */
 function HealthGauge({ score, size = 160, strokeWidth = 12 }) {
@@ -121,28 +122,42 @@ export default function ResumeWarnings() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [hasFile, setHasFile] = useState(false)
+  const { analysisResult, setAnalysisResult } = useAnalysis()
 
   useEffect(() => {
-    const storedAnalysis = sessionStorage.getItem('resumeAnalysis')
-    if (storedAnalysis) {
-      const analysis = JSON.parse(storedAnalysis)
+    if (analysisResult) {
       setHasFile(true)
-      setFormatData(buildFormatData(analysis))
+      setFormatData(buildFormatData(analysisResult))
+      return
     }
-  }, [])
+
+    const cachedResult = localStorage.getItem('analysisResult')
+    if (cachedResult) {
+      try {
+        const parsed = JSON.parse(cachedResult)
+        setHasFile(true)
+        setFormatData(buildFormatData(parsed))
+      } catch (parseError) {
+        console.error('Failed to parse cached analysis result:', parseError)
+      }
+    }
+  }, [analysisResult])
 
   function buildFormatData(analysis) {
     const issues = analysis?.parsing?.validation?.issues || []
-    const warnings = issues.map((issue) => ({
+    const explicitWarnings = analysis?.warnings || []
+    const warnings = issues.map((issue, index) => ({
+      id: `validation-${index}`,
       title: issue,
       priority: 'high',
       category: 'Validation',
       icon: '⚠️',
     }))
 
-    const improvementTips = analysis?.ats_analysis?.improvement_tips || []
-    improvementTips.forEach((tip) => {
+    const improvementTips = analysis?.suggestions || analysis?.ats_analysis?.improvement_tips || []
+    improvementTips.forEach((tip, index) => {
       warnings.push({
+        id: `suggestion-${index}`,
         title: tip,
         priority: 'medium',
         category: 'ATS',
@@ -150,10 +165,44 @@ export default function ResumeWarnings() {
       })
     })
 
+    explicitWarnings.forEach((warning, index) => {
+      if (typeof warning === 'string') {
+        warnings.push({
+          id: `warning-${index}`,
+          title: warning,
+          priority: 'medium',
+          category: 'Warnings',
+          icon: '⚠️',
+        })
+        return
+      }
+
+      warnings.push({
+        id: warning?.id || `warning-${index}`,
+        title: warning?.title || warning?.message || 'Warning',
+        message: warning?.message || '',
+        suggestion: warning?.suggestion || '',
+        priority: warning?.priority || 'medium',
+        category: warning?.category || 'Warnings',
+        icon: warning?.icon || '⚠️',
+      })
+    })
+
+    const matchScore = analysis?.match_score ?? analysis?.score ?? 0
+    const formatBreakdownScore = analysis?.ats_analysis?.breakdown?.format ?? analysis?.ats_analysis?.breakdown?.format_score
+    const healthScore = Number.isFinite(formatBreakdownScore) ? formatBreakdownScore : matchScore
+
     return {
       warnings,
-      format_score: analysis?.ats_analysis?.breakdown?.format ?? 0,
+      format_score: healthScore,
       summary: analysis?.parsing?.validation?.warnings || [],
+      overall_suggestions: improvementTips,
+      page_count: analysis?.parsing?.page_count || 1,
+      length_analysis: analysis?.format_checker?.length_analysis,
+      bullet_point_analysis: analysis?.format_checker?.bullet_point_analysis,
+      action_verb_analysis: analysis?.format_checker?.action_verb_analysis,
+      quantified_results_analysis: analysis?.format_checker?.quantified_results_analysis,
+      weak_wording_analysis: analysis?.format_checker?.weak_wording_analysis,
     }
   }
 
@@ -166,8 +215,7 @@ export default function ResumeWarnings() {
 
     try {
       const response = await resumeAPI.uploadAndAnalyze(f)
-      const payload = response.data
-      const analysis = payload.data?.analysis || payload.data
+      const analysis = response.data
 
       const reader = new FileReader()
       reader.onload = () => {
@@ -176,7 +224,7 @@ export default function ResumeWarnings() {
       }
       reader.readAsDataURL(f)
 
-      sessionStorage.setItem('resumeAnalysis', JSON.stringify(analysis))
+      setAnalysisResult(analysis)
       setHasFile(true)
       setFormatData(buildFormatData(analysis))
     } catch (err) {

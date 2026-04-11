@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { useAnalysis } from '../context/AnalysisContext'
 
 function getScoreColor(score) {
   if (score >= 75) return '#22c55e'
@@ -34,11 +35,12 @@ function SectionCard({ title, children, tone = 'default' }) {
 
 export default function Results() {
   const location = useLocation()
+  const { analysisResult: contextAnalysisResult } = useAnalysis()
 
   const cachedResult = localStorage.getItem('analysisResult')
-  let analysisResult = null
+  let analysisResult = contextAnalysisResult
 
-  if (cachedResult) {
+  if (!analysisResult && cachedResult) {
     try {
       analysisResult = JSON.parse(cachedResult)
     } catch (error) {
