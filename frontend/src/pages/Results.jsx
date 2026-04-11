@@ -50,7 +50,7 @@ export default function Results() {
     analysisResult = location.state?.analysisResult || null
   }
 
-  const matchScore = analysisResult?.match_score ?? analysisResult?.ats_analysis?.score ?? 0
+  const matchScore = analysisResult?.match_score ?? analysisResult?.score ?? analysisResult?.ats_analysis?.score ?? 0
   const confidence = analysisResult?.confidence || 'Low'
   const verdict = analysisResult?.verdict || 'Low Match'
   const jobDescriptionProvided = analysisResult?.job_description_provided ?? false

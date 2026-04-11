@@ -1,0 +1,6 @@
+Professional Summary
+Frontend developer with experience building web applications.
+Skills: React, JavaScript, CSS.
+Experience: Built responsive React components using JavaScript and CSS for production dashboards.
+Projects: Created multiple React interfaces with reusable JavaScript modules and modern CSS styling.
+Education: Bachelor degree in computer science.
