@@ -14,15 +14,11 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <AuthContext.Provider value={{ user }}>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
   );
