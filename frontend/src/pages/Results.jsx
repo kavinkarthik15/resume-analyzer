@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react'
 
 function getScoreColor(score) {
   if (score >= 75) return '#22c55e'
@@ -16,16 +17,16 @@ function getScoreBarColor(score) {
 function SectionCard({ title, children, tone = 'default' }) {
   const toneClasses =
     tone === 'success'
-      ? 'border-emerald-400/20 bg-emerald-500/10'
+      ? 'border-emerald-200 bg-emerald-50/70'
       : tone === 'danger'
-      ? 'border-red-400/20 bg-red-500/10'
+      ? 'border-red-200 bg-red-50/70'
       : tone === 'accent'
-      ? 'border-cyan-400/20 bg-cyan-500/10'
-      : 'border-white/10 bg-white/5'
+      ? 'border-slate-200 bg-slate-50'
+      : 'border-slate-200 bg-white'
 
   return (
-    <div className={`rounded-2xl border backdrop-blur-xl p-6 ${toneClasses}`}>
-      <h3 className="text-lg font-bold mb-4 text-white">{title}</h3>
+    <div className={`rounded-2xl border p-6 shadow-sm ${toneClasses}`}>
+      <h3 className="text-lg font-medium mb-4 text-slate-900">{title}</h3>
       {children}
     </div>
   )
@@ -60,23 +61,25 @@ export default function Results() {
   const scoreBarColor = getScoreBarColor(matchScore)
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#07102a] via-[#0f2b4f] to-[#0b0620] text-white pt-20 px-6 pb-10">
+    <main className="min-h-screen bg-gradient-to-br from-[#f7f7f4] via-[#f4f6f8] to-[#eef2f7] text-slate-900 pt-24 px-6 pb-10">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
+        <div className="mb-8 max-w-xl text-left">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">
             Job Match Analysis
           </h1>
-          <p className="mt-3 text-slate-400 max-w-2xl">
+          <p className="mt-3 text-slate-600">
             Review how closely your resume aligns with the job description and where to improve next.
           </p>
         </div>
 
         {!analysisResult ? (
-          <div className="rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/30 backdrop-blur-xl p-8 text-center">
-            <div className="text-5xl mb-4">📄</div>
-            <p className="text-slate-300 text-lg mb-2">No resume uploaded yet</p>
-            <p className="text-slate-400 mb-6">Upload your resume and paste a job description to get a match analysis.</p>
-            <Link to="/resume-analysis" className="btn primary">Upload Your Resume</Link>
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm text-left max-w-xl">
+            <p className="text-slate-900 text-lg font-medium mb-2">No resume uploaded yet</p>
+            <p className="text-slate-600 mb-6">Upload your resume and paste a job description to get a match analysis.</p>
+            <Link to="/resume-analysis" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black text-white hover:bg-slate-800 transition">
+              <ArrowRight size={16} strokeWidth={1.5} className="opacity-80" />
+              Upload your resume
+            </Link>
           </div>
         ) : (
           <div className="space-y-6">
@@ -84,14 +87,14 @@ export default function Results() {
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                 <div>
                   <h2 className="text-4xl sm:text-5xl font-extrabold" style={{ color: scoreColor }}>
-                    Match Score: {matchScore}%
+                    {matchScore}%
                   </h2>
-                  <h3 className="mt-2 text-2xl font-bold text-white">{verdict}</h3>
-                  <p className="mt-2 text-slate-300">
-                    Confidence: <span className="font-semibold text-white">{confidence}</span>
+                  <h3 className="mt-2 text-2xl font-semibold text-slate-900">{verdict}</h3>
+                  <p className="mt-2 text-slate-600">
+                    Confidence: <span className="font-semibold text-slate-900">{confidence}</span>
                   </p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-300">
+                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
                   Higher scores mean stronger alignment between your resume and the job description.
                 </div>
               </div>
@@ -108,9 +111,10 @@ export default function Results() {
 
             {!jobDescriptionProvided && (
               <SectionCard title="Job Description Needed" tone="accent">
-                <p className="text-slate-200">
-                  Upload a job description to get a personalized match analysis.
-                </p>
+                <div className="flex items-center gap-2 text-slate-700">
+                  <AlertCircle size={16} strokeWidth={1.5} className="opacity-80" />
+                  <p>Upload a job description to get a personalized match analysis.</p>
+                </div>
               </SectionCard>
             )}
 
@@ -119,14 +123,14 @@ export default function Results() {
                 {matchedSkills.length > 0 ? (
                   <ul className="space-y-3">
                     {matchedSkills.map((skill, index) => (
-                      <li key={index} className="flex items-center gap-3 text-emerald-200">
-                        <span className="text-emerald-400 font-bold">✔</span>
+                      <li key={index} className="flex items-center gap-3 text-emerald-800">
+                        <CheckCircle2 size={16} strokeWidth={1.5} className="opacity-80" />
                         <span>{skill}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-slate-300">No matched skills detected yet.</p>
+                  <p className="text-slate-600">No matched skills detected yet.</p>
                 )}
               </SectionCard>
 
@@ -134,14 +138,14 @@ export default function Results() {
                 {missingSkills.length > 0 ? (
                   <ul className="space-y-3">
                     {missingSkills.map((skill, index) => (
-                      <li key={index} className="flex items-center gap-3 text-red-200">
-                        <span className="text-red-400 font-bold">✘</span>
+                      <li key={index} className="flex items-center gap-3 text-red-800">
+                        <AlertCircle size={16} strokeWidth={1.5} className="opacity-80" />
                         <span>{skill}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-slate-300">No missing skills detected. Great match.</p>
+                  <p className="text-slate-600">No missing skills detected. Great match.</p>
                 )}
               </SectionCard>
             </div>
@@ -150,29 +154,29 @@ export default function Results() {
               {suggestions.length > 0 ? (
                 <ul className="space-y-3">
                   {suggestions.map((suggestion, index) => (
-                    <li key={index} className="flex items-start gap-3 text-slate-200">
-                      <span className="text-cyan-300">→</span>
+                    <li key={index} className="flex items-start gap-3 text-slate-700">
+                      <ArrowRight size={16} strokeWidth={1.5} className="opacity-80 mt-0.5" />
                       <span>{suggestion}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-slate-300">Upload a resume and job description to see improvement suggestions.</p>
+                <p className="text-slate-600">Upload a resume and job description to see improvement suggestions.</p>
               )}
             </SectionCard>
 
             <SectionCard title="Tips to Improve" tone="accent">
-              <ul className="space-y-3 text-slate-200">
+              <ul className="space-y-3 text-slate-700">
                 <li className="flex items-start gap-3">
-                  <span className="text-cyan-300">→</span>
+                  <ArrowRight size={16} strokeWidth={1.5} className="opacity-80 mt-0.5" />
                   <span>Use exact skill keywords from the job description.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-cyan-300">→</span>
+                  <ArrowRight size={16} strokeWidth={1.5} className="opacity-80 mt-0.5" />
                   <span>Add measurable achievements to show impact.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-cyan-300">→</span>
+                  <ArrowRight size={16} strokeWidth={1.5} className="opacity-80 mt-0.5" />
                   <span>Include relevant tools and technologies from your target role.</span>
                 </li>
               </ul>

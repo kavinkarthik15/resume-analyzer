@@ -1,5 +1,6 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { AlertCircle, ArrowRight, LogIn, Upload } from 'lucide-react'
 import illustration from '../assets/ai-illustration.svg'
 import { resumeAPI } from '../services/api'
 
@@ -8,6 +9,14 @@ export default function Landing(){
   const [isAnalyzing, setIsAnalyzing] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState('')
   const navigate = useNavigate()
+
+  const isAuthenticated = React.useMemo(() => {
+    try {
+      return Boolean(localStorage.getItem('authUser'))
+    } catch {
+      return false
+    }
+  }, [])
 
   function saveAnalysisToHistory(analysisResult, fileName = 'Demo Resume'){
     const stored = localStorage.getItem('analysisHistory')
@@ -144,69 +153,88 @@ export default function Landing(){
     }
   }
 
+  if (!isAuthenticated) {
+    return (
+      <main className="w-full min-h-screen bg-gradient-to-br from-[#f7f7f4] via-[#f4f6f8] to-[#eef2f7] pt-24 px-6">
+        <div className="max-w-md mx-auto mt-16 rounded-2xl border border-slate-200 bg-white shadow-sm p-8 text-left">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">Login required</h2>
+          <p className="text-slate-600 mb-6">Please login to upload and analyze your resume.</p>
+          <Link
+            to="/login"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black text-white hover:bg-slate-800 transition"
+          >
+            <LogIn size={16} strokeWidth={1.5} className="opacity-80" />
+            Go to login
+          </Link>
+        </div>
+      </main>
+    )
+  }
+
   return (
-    <main className="w-full min-h-screen bg-gradient-to-br from-[#07102a] via-[#0f2b4f] to-[#0b0620] text-white overflow-hidden pt-20">
-      <div className="w-full px-6 h-full">
-        <section className="flex flex-col-reverse lg:flex-row items-center gap-12 px-6 py-16 animate-fade-in">
-          <div className="flex-1 animate-slide-left">
-            <h1 className="text-4xl sm:text-5xl font-bold leading-tight bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">Improve Your Resume with AI</h1>
-            <p className="mt-4 text-lg text-slate-300">Get ATS Score, Skill Analysis, and Smart Suggestions in Seconds.</p>
-            <div className="mt-8 flex gap-4">
-              <button onClick={handleUpload} disabled={isAnalyzing} className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg hover:scale-110 transform transition btn-glow font-semibold disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100">{isAnalyzing ? 'Analyzing...' : 'Upload Resume'}</button>
-              <button onClick={handleDemo} className="px-6 py-3 rounded-full bg-transparent border border-slate-400 hover:bg-white/10 transition font-semibold">Try Demo</button>
+    <main className="w-full min-h-screen bg-gradient-to-br from-[#f7f7f4] via-[#f4f6f8] to-[#eef2f7] text-slate-900 pt-24 px-6 pb-16">
+      <div className="max-w-6xl mx-auto">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <div className="max-w-xl text-left">
+            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-3">
+              Upload your resume
+            </h1>
+            <p className="text-slate-600 mb-7">
+              Get instant job match insights based on your resume and optional job description.
+            </p>
+
+            <div className="flex flex-wrap gap-3 mb-5">
+              <button
+                onClick={handleUpload}
+                disabled={isAnalyzing}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-black text-white hover:bg-slate-800 transition disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <Upload size={16} strokeWidth={1.5} className="opacity-80" />
+                {isAnalyzing ? 'Analyzing...' : 'Upload Resume'}
+              </button>
+              <button
+                onClick={handleDemo}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 bg-white text-slate-900 hover:bg-slate-100 transition"
+              >
+                <ArrowRight size={16} strokeWidth={1.5} className="opacity-80" />
+                Try Demo
+              </button>
               <input type="file" accept=".pdf,.doc,.docx" ref={fileInput} onChange={handleFileChange} className="hidden" />
             </div>
-            {errorMessage && <p className="mt-4 text-sm text-red-300">{errorMessage}</p>}
-          </div>
 
-          <div className="flex-1 flex items-center justify-center animate-slide-right animate-float">
-            <div className="w-full max-w-sm bg-white/5 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-white/10">
-              <div className="h-56 bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-400 rounded-lg flex items-center justify-center">
-                <img src={illustration} alt="AI graphic" className="h-full w-full object-contain" />
+            {errorMessage && (
+              <div className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 mb-6">
+                <AlertCircle size={16} strokeWidth={1.5} className="opacity-80 mt-0.5" />
+                <p className="text-sm leading-6">{errorMessage}</p>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <h3 className="font-medium mb-2">ATS match score</h3>
+                <p className="text-sm text-slate-600">Understand how your resume performs in applicant tracking systems.</p>
+              </div>
+              <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <h3 className="font-medium mb-2">Skill gaps</h3>
+                <p className="text-sm text-slate-600">See which missing skills matter most for your target role.</p>
+              </div>
+              <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <h3 className="font-medium mb-2">Actionable rewrite tips</h3>
+                <p className="text-sm text-slate-600">Get practical suggestions to improve impact and clarity.</p>
+              </div>
+              <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <h3 className="font-medium mb-2">JD alignment insights</h3>
+                <p className="text-sm text-slate-600">Compare your resume against a job description when provided.</p>
               </div>
             </div>
           </div>
-        </section>
 
-        <section className="mt-20 px-6 py-12 bg-gradient-to-r from-blue-900/20 to-purple-900/20 animate-fade-in">
-          <h2 className="text-3xl font-bold mb-12 text-center">Key Features</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-white/5 backdrop-blur hover:bg-white/10 transform transition hover:scale-105 shadow-lg feature-card border border-white/10">
-              <div className="text-3xl mb-3">📊</div>
-              <h3 className="font-bold text-lg">ATS Score Analysis</h3>
-              <p className="mt-2 text-sm text-slate-300">Optimize your resume for applicant tracking systems.</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-white/5 backdrop-blur hover:bg-white/10 transform transition hover:scale-105 shadow-lg feature-card border border-white/10">
-              <div className="text-3xl mb-3">⚡</div>
-              <h3 className="font-bold text-lg">Skill Gap Detection</h3>
-              <p className="mt-2 text-sm text-slate-300">Identify missing skills for target roles.</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-white/5 backdrop-blur hover:bg-white/10 transform transition hover:scale-105 shadow-lg feature-card border border-white/10">
-              <div className="text-3xl mb-3">✨</div>
-              <h3 className="font-bold text-lg">Resume Suggestions</h3>
-              <p className="mt-2 text-sm text-slate-300">Improve phrasing and structure with AI.</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-white/5 backdrop-blur hover:bg-white/10 transform transition hover:scale-105 shadow-lg feature-card border border-white/10">
-              <div className="text-3xl mb-3">🎯</div>
-              <h3 className="font-bold text-lg">Job Description Matching</h3>
-              <p className="mt-2 text-sm text-slate-300">Match your resume to job descriptions.</p>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="h-72 rounded-2xl bg-gradient-to-br from-slate-100 via-blue-50 to-emerald-50 flex items-center justify-center overflow-hidden">
+              <img src={illustration} alt="Resume analysis illustration" className="h-full w-full object-contain" />
             </div>
           </div>
         </section>
-
-        <section className="mt-12 px-6 py-16 text-center">
-          <h2 className="text-3xl font-bold mb-8">Ready to Improve Your Resume?</h2>
-          <button onClick={handleUpload} className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 shadow-2xl hover:scale-110 transform transition btn-glow font-bold text-lg">Start Analyzing Now</button>
-        </section>
-
-        <footer className="mt-20 px-6 py-12 bg-black/30 border-t border-white/10 text-center text-slate-400">
-          <p>© 2026 AI Resume Analyzer. All rights reserved.</p>
-          <div className="mt-4 flex justify-center gap-6">
-            <a href="#" className="hover:text-white transition">Privacy</a>
-            <a href="#" className="hover:text-white transition">Terms</a>
-            <a href="#" className="hover:text-white transition">Contact</a>
-          </div>
-        </footer>
       </div>
     </main>
   )

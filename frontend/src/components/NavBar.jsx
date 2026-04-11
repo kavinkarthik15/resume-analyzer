@@ -1,10 +1,20 @@
 import React, { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { signOut } from 'firebase/auth'
+import { auth } from '../firebase'
+import { useAuth } from '../context/AuthContext'
 
-export default function NavBar({onLogin, onRegister, isLoggedIn, userProfile, onLogout}){
+export default function NavBar(){
   const [profileOpen, setProfileOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useAuth()
+
+  const handleLogout = async () => {
+    await signOut(auth)
+    alert('Logged out successfully')
+    setProfileOpen(false)
+  }
 
   function scrollToSection(id) {
     if (location.pathname !== '/') {
@@ -36,29 +46,31 @@ export default function NavBar({onLogin, onRegister, isLoggedIn, userProfile, on
             <a href="/#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }} className="text-slate-300 hover:text-white transition font-medium">Contact</a>
           </nav>
 
-          {!isLoggedIn ? (
+          {!user ? (
             <div className="flex items-center gap-3">
-              <button onClick={onLogin} className="px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold transition">Login</button>
-              <button onClick={onRegister} className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg btn-glow font-semibold transition">Register</button>
+              <Link to="/login" className="px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold transition">Login</Link>
             </div>
           ) : (
-            userProfile && (
+            <div className="relative flex items-center gap-3">
+              <span style={{ marginRight: '10px' }} className="text-slate-200 text-sm">
+                {user.email}
+              </span>
               <div className="relative">
                 <button 
                   onClick={() => setProfileOpen(!profileOpen)}
                   className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold hover:scale-110 transition shadow-lg"
                 >
-                  {userProfile.name.charAt(0).toUpperCase()}
+                  {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
                 </button>
                 
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white/10 border border-white/20 backdrop-blur-xl rounded-lg shadow-lg p-4 animate-fade-in">
-                    <div className="text-white font-semibold mb-3">{userProfile.name}</div>
+                    <div className="text-white font-semibold mb-3">{user.displayName || user.email}</div>
                     <a href="#profile" className="block text-slate-300 hover:text-white mb-2 transition">My Profile</a>
                     <a href="#resumes" className="block text-slate-300 hover:text-white mb-2 transition">My Resumes</a>
                     <a href="#settings" className="block text-slate-300 hover:text-white mb-4 transition">Settings</a>
                     <button 
-                      onClick={() => { onLogout(); setProfileOpen(false); }}
+                      onClick={handleLogout}
                       className="w-full px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition"
                     >
                       Logout
@@ -66,7 +78,7 @@ export default function NavBar({onLogin, onRegister, isLoggedIn, userProfile, on
                   </div>
                 )}
               </div>
-            )
+            </div>
           )}
         </div>
       </div>

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AlertCircle, CheckCircle2, Upload as UploadIcon } from 'lucide-react';
 import { resumeAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 export default function Upload() {
   const [file, setFile] = useState(null);
@@ -8,7 +10,18 @@ export default function Upload() {
   const [jobDescription, setJobDescription] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState('');
+  const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    return null;
+  }
 
   function handleFile(e) {
     const selectedFile = e.target.files[0];
@@ -74,21 +87,17 @@ export default function Upload() {
   }
 
   return (
-    <div className="page page-upload">
-      <div className="upload-panel glass-card">
-        <h2>📄 Upload Your Resume</h2>
-        <p>Upload your resume (PDF or DOCX) and get AI-powered analysis</p>
+    <div className="w-full min-h-screen bg-gradient-to-br from-[#f7f7f4] via-[#f4f6f8] to-[#eef2f7] px-6 pt-24 pb-12">
+      <div className="max-w-3xl mx-auto rounded-3xl border border-slate-200 bg-white shadow-sm p-8">
+        <div className="max-w-xl text-left">
+          <h2 className="text-2xl font-semibold mb-2 text-slate-900">Upload your resume</h2>
+          <p className="text-slate-500 mb-6">Upload your resume to get instant job-match and ATS insights.</p>
+        </div>
 
         {error && (
-          <div className="error-message" style={{
-            color: '#ef4444',
-            background: '#fef2f2',
-            padding: '12px',
-            borderRadius: '8px',
-            marginBottom: '16px',
-            border: '1px solid #fecaca'
-          }}>
-            ⚠️ {error}
+          <div className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 mb-4">
+            <AlertCircle size={16} strokeWidth={1.5} className="opacity-80 mt-0.5" />
+            <p>{error}</p>
           </div>
         )}
 
@@ -129,37 +138,22 @@ export default function Upload() {
             />
             <label
               htmlFor="resume-file"
-              className="file-input-label"
-              style={{
-                display: 'inline-block',
-                padding: '12px 24px',
-                background: '#f3f4f6',
-                border: '2px dashed #d1d5db',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                marginBottom: '16px',
-                transition: 'all 0.2s'
-              }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition cursor-pointer mb-4"
             >
-              📎 Choose File
+              <UploadIcon size={16} strokeWidth={1.5} className="opacity-80" />
+              Choose file
             </label>
           </div>
 
           {fileName && (
-            <div className="file-name" style={{
-              padding: '8px 12px',
-              background: '#ecfdf5',
-              border: '1px solid #d1fae5',
-              borderRadius: '6px',
-              marginBottom: '16px',
-              color: '#065f46'
-            }}>
-              ✅ {fileName}
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-800 mb-4">
+              <CheckCircle2 size={16} strokeWidth={1.5} className="opacity-80" />
+              {fileName}
             </div>
           )}
 
           <button
-            className="btn primary"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-black text-white hover:bg-slate-800 transition"
             type="submit"
             disabled={isAnalyzing || !file}
             style={{
@@ -167,13 +161,14 @@ export default function Upload() {
               cursor: (isAnalyzing || !file) ? 'not-allowed' : 'pointer'
             }}
           >
-            {isAnalyzing ? '🔄 Analyzing...' : '🚀 Analyze Resume'}
+            <UploadIcon size={16} strokeWidth={1.5} className="opacity-80" />
+            {isAnalyzing ? 'Analyzing...' : 'Analyze Resume'}
           </button>
         </form>
 
         <div className="upload-info" style={{ marginTop: '24px', fontSize: '14px', color: '#6b7280' }}>
           <p style={{ marginBottom: '12px', fontSize: '12px', color: '#9ca3af', fontStyle: 'italic' }}>
-            💡 <strong>Tip:</strong> Upload a real resume with skills, projects, and experience for best results. File size must be under 2MB.
+            <strong>Tip:</strong> Upload a real resume with skills, projects, and experience for best results. File size must be under 2MB.
           </p>
           <p><strong>What happens next?</strong></p>
           <ul style={{ paddingLeft: '20px', lineHeight: '1.6' }}>
