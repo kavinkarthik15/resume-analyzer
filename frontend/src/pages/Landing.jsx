@@ -9,6 +9,7 @@ export default function Landing(){
   const fileInput = React.useRef(null)
   const [isAnalyzing, setIsAnalyzing] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState('')
+  const [jobDescription, setJobDescription] = React.useState('')
   const navigate = useNavigate()
   const { user } = useAuth()
 
@@ -116,7 +117,15 @@ export default function Landing(){
       setErrorMessage('')
 
       try {
-        const response = await resumeAPI.uploadAndAnalyze(f)
+        const jd = jobDescription.trim()
+        if (!jd) {
+          setErrorMessage('Job Description Needed. Please paste a JD before analyzing.')
+          setIsAnalyzing(false)
+          e.target.value = ''
+          return
+        }
+
+        const response = await resumeAPI.uploadAndAnalyze(f, jd)
         
         // Store the file for format checking on the warnings page
         const reader = new FileReader()
@@ -164,6 +173,19 @@ export default function Landing(){
             <p className="text-slate-600 mb-7">
               Get instant job match insights based on your resume and optional job description.
             </p>
+
+            <div className="mb-5">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Job Description
+              </label>
+              <textarea
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                placeholder="Paste the job description here..."
+                rows={6}
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+              />
+            </div>
 
             <div className="flex flex-wrap gap-3 mb-5">
               <button
