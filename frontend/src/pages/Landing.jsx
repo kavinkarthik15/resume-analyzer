@@ -1,22 +1,16 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { AlertCircle, ArrowRight, LogIn, Upload } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { AlertCircle, ArrowRight, Upload } from 'lucide-react'
 import illustration from '../assets/ai-illustration.svg'
 import { resumeAPI } from '../services/api'
+import { useAuth } from '../context/AuthContext'
 
 export default function Landing(){
   const fileInput = React.useRef(null)
   const [isAnalyzing, setIsAnalyzing] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState('')
   const navigate = useNavigate()
-
-  const isAuthenticated = React.useMemo(() => {
-    try {
-      return Boolean(localStorage.getItem('authUser'))
-    } catch {
-      return false
-    }
-  }, [])
+  const { user } = useAuth()
 
   function saveAnalysisToHistory(analysisResult, fileName = 'Demo Resume'){
     const stored = localStorage.getItem('analysisHistory')
@@ -42,6 +36,12 @@ export default function Landing(){
   }
 
   function handleUpload(){
+    if (!user) {
+      alert('Please login to upload your resume')
+      navigate('/login')
+      return
+    }
+
     fileInput.current?.click()
   }
 
@@ -153,24 +153,6 @@ export default function Landing(){
     }
   }
 
-  if (!isAuthenticated) {
-    return (
-      <main className="w-full min-h-screen bg-gradient-to-br from-[#f7f7f4] via-[#f4f6f8] to-[#eef2f7] pt-24 px-6">
-        <div className="max-w-md mx-auto mt-16 rounded-2xl border border-slate-200 bg-white shadow-sm p-8 text-left">
-          <h2 className="text-2xl font-semibold text-slate-900 mb-2">Login required</h2>
-          <p className="text-slate-600 mb-6">Please login to upload and analyze your resume.</p>
-          <Link
-            to="/login"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black text-white hover:bg-slate-800 transition"
-          >
-            <LogIn size={16} strokeWidth={1.5} className="opacity-80" />
-            Go to login
-          </Link>
-        </div>
-      </main>
-    )
-  }
-
   return (
     <main className="w-full min-h-screen bg-gradient-to-br from-[#f7f7f4] via-[#f4f6f8] to-[#eef2f7] text-slate-900 pt-24 px-6 pb-16">
       <div className="max-w-6xl mx-auto">
@@ -190,7 +172,7 @@ export default function Landing(){
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-black text-white hover:bg-slate-800 transition disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <Upload size={16} strokeWidth={1.5} className="opacity-80" />
-                {isAnalyzing ? 'Analyzing...' : 'Upload Resume'}
+                {isAnalyzing ? 'Analyzing...' : user ? 'Upload Resume' : 'Login to Upload'}
               </button>
               <button
                 onClick={handleDemo}
