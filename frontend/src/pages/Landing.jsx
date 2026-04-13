@@ -2,14 +2,23 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AlertCircle, ArrowRight, Upload } from 'lucide-react'
 import illustration from '../assets/ai-illustration.svg'
-import { resumeAPI } from '../services/api'
+import { jdAPI, resumeAPI } from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import { saveResumeAnalysis } from '../services/firestoreService'
 
 export default function Landing(){
   const fileInput = React.useRef(null)
   const [isAnalyzing, setIsAnalyzing] = React.useState(false)
+  const [loadingJD, setLoadingJD] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState('')
   const [jobDescription, setJobDescription] = React.useState('')
+  const [roleData, setRoleData] = React.useState({
+    role: '',
+    experience: '',
+    workType: '',
+    location: '',
+    skills: '',
+  })
   const navigate = useNavigate()
   const { user } = useAuth()
 
@@ -44,6 +53,24 @@ export default function Landing(){
     }
 
     fileInput.current?.click()
+  }
+
+  async function handleGenerateJD() {
+    if (!roleData.role.trim() || !roleData.experience.trim()) {
+      alert('Fill role and experience first')
+      return
+    }
+
+    setLoadingJD(true)
+
+    try {
+      const response = await jdAPI.generate(roleData)
+      setJobDescription(response.data.job_description || '')
+    } catch (error) {
+      alert('Failed to generate JD')
+    } finally {
+      setLoadingJD(false)
+    }
   }
 
   function handleDemo(){
@@ -113,6 +140,12 @@ export default function Landing(){
         return;
       }
 
+      if (!roleData.role.trim() || !roleData.experience.trim()) {
+        setErrorMessage('Please fill role and experience.')
+        e.target.value = ''
+        return
+      }
+
       setIsAnalyzing(true)
       setErrorMessage('')
 
@@ -125,7 +158,10 @@ export default function Landing(){
           return
         }
 
-        const response = await resumeAPI.uploadAndAnalyze(f, jd)
+        const response = await resumeAPI.uploadAndAnalyze(f, {
+          job_description: jd,
+          role_data: roleData,
+        })
         
         // Store the file for format checking on the warnings page
         const reader = new FileReader()
@@ -141,6 +177,18 @@ export default function Landing(){
         saveAnalysisToHistory(analysisData, f.name)
         localStorage.setItem('analysisResult', JSON.stringify(analysisData))
         sessionStorage.setItem('resumeAnalysis', JSON.stringify(analysisData))
+
+        if (user) {
+          try {
+            await saveResumeAnalysis(user.uid, {
+              ...analysisData,
+              fileName: f.name,
+            })
+          } catch (saveError) {
+            console.error('Failed to persist resume analysis:', saveError)
+          }
+        }
+
         navigate('/results', { state: { analysisResult: analysisData } })
       } catch (error) {
         let message = 'Something went wrong. Please try again.';
@@ -173,6 +221,46 @@ export default function Landing(){
             <p className="text-slate-600 mb-7">
               Get instant job match insights based on your resume and optional job description.
             </p>
+
+            <div className="mb-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-3">Role details</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  placeholder="Role (e.g. Frontend Developer)"
+                  value={roleData.role}
+                  onChange={(e) => setRoleData((prev) => ({ ...prev, role: e.target.value }))}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                />
+                <input
+                  placeholder="Experience (e.g. 2+ years)"
+                  value={roleData.experience}
+                  onChange={(e) => setRoleData((prev) => ({ ...prev, experience: e.target.value }))}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                />
+                <select
+                  value={roleData.workType}
+                  onChange={(e) => setRoleData((prev) => ({ ...prev, workType: e.target.value }))}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                >
+                  <option value="">Work Type</option>
+                  <option value="remote">Remote</option>
+                  <option value="onsite">On-site</option>
+                  <option value="hybrid">Hybrid</option>
+                </select>
+                <input
+                  placeholder="Location (optional)"
+                  value={roleData.location}
+                  onChange={(e) => setRoleData((prev) => ({ ...prev, location: e.target.value }))}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                />
+                <input
+                  placeholder="Key Skills (comma separated)"
+                  value={roleData.skills}
+                  onChange={(e) => setRoleData((prev) => ({ ...prev, skills: e.target.value }))}
+                  className="w-full sm:col-span-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                />
+              </div>
+            </div>
 
             <div className="mb-5">
               <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -213,6 +301,14 @@ export default function Landing(){
               </div>
             )}
 
+              <button
+                type="button"
+                onClick={handleGenerateJD}
+                disabled={loadingJD}
+                className="mt-3 inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 transition disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {loadingJD ? 'Generating...' : '✨ Generate Job Description'}
+              </button>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
                 <h3 className="font-medium mb-2">ATS match score</h3>

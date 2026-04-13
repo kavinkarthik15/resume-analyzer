@@ -6,6 +6,7 @@ from .routes.job import router as job_router
 from .routes.chat import router as chat_router
 from .routes.ml import router as ml_router
 from .routes.rewrite import router as rewrite_router
+from .routes.jd_generator import router as jd_router
 
 app = FastAPI(title="AI Resume Analyzer API", version="2.0.0")
 
@@ -23,6 +24,7 @@ app.include_router(job_router, prefix="/api", tags=["Job"])
 app.include_router(chat_router, prefix="/api", tags=["Chat"])
 app.include_router(ml_router, prefix="/api", tags=["ML"])
 app.include_router(rewrite_router, prefix="/api", tags=["Rewrite"])
+app.include_router(jd_router, prefix="/api", tags=["JD Generator"])
 
 @app.get("/health")
 def health_check() -> dict:

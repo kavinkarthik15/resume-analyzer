@@ -213,6 +213,31 @@ h3 { font-size: 1.5rem; }
   animation: scaleIn 0.3s ease-out forwards;
 }
 
+/* Hide scrollbar but allow scroll for mobile tab rails */
+.tabs-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tabs-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.tab-panel {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  transition: all 0.25s ease;
+}
+
+.tab-panel.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.explain-panel {
+  animation: fadeIn 0.2s ease;
+}
+
 /* ==================== GLASS MORPHISM ==================== */
 
 .glass {
@@ -266,8 +291,7 @@ h3 { font-size: 1.5rem; }
 /* Accent Card */
 .card-accent {
   background: var(--accent-soft);
-  border: 1px solid var(--accent);
-  border-opacity: 0.3;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   transition: all 0.3s ease;
 }
 

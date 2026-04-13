@@ -32,6 +32,9 @@ class ResumeAnalysisResponse(BaseModel):
     matched_skills: List[str] = Field(default_factory=list, description="Matched skills")
     missing_skills: List[str] = Field(default_factory=list, description="Missing skills")
     suggestions: List[str] = Field(default_factory=list, description="Match suggestions")
+    warnings: List[Dict[str, Any]] = Field(default_factory=list, description="Role and quality warnings")
+    experience_level: Optional[str] = Field(None, description="Detected junior/mid/senior level")
+    interview_probability: Dict[str, Any] = Field(default_factory=dict, description="Interview chance label and adjusted score")
 
     # Parsing results
     parsing: Dict[str, Any] = Field(default_factory=dict, description="Resume parsing results")
@@ -39,8 +42,12 @@ class ResumeAnalysisResponse(BaseModel):
     # ATS analysis
     ats_analysis: Dict[str, Any] = Field(default_factory=dict, description="ATS scoring analysis")
 
-        verdict: str = Field("Low Match", description="Human-readable match verdict")
-        job_description_provided: bool = Field(False, description="Whether a job description was provided")
+    verdict: str = Field("Low Match", description="Human-readable match verdict")
+    job_description_provided: bool = Field(False, description="Whether a job description was provided")
+
+    # Role context
+    role_data: Dict[str, Any] = Field(default_factory=dict, description="Structured role details submitted with the analysis")
+    role_context: Dict[str, Any] = Field(default_factory=dict, description="Derived recruiter-style context and evaluation")
     # Chat context
     chat_ready: bool = Field(False, description="Whether chat is ready")
     chat_context_summary: str = Field("", description="Chat context summary")

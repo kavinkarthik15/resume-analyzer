@@ -131,7 +131,7 @@ export default function ResumeWarnings() {
       return
     }
 
-    const cachedResult = localStorage.getItem('analysisResult')
+    const cachedResult = localStorage.getItem('analysis') || localStorage.getItem('analysisResult')
     if (cachedResult) {
       try {
         const parsed = JSON.parse(cachedResult)
@@ -144,6 +144,14 @@ export default function ResumeWarnings() {
   }, [analysisResult])
 
   function buildFormatData(analysis) {
+    const warningTypeMap = {
+      skills: { priority: 'high', category: 'Skills', icon: '🧩' },
+      impact: { priority: 'high', category: 'Impact', icon: '📊' },
+      writing: { priority: 'medium', category: 'Writing', icon: '✍️' },
+      section: { priority: 'high', category: 'Sections', icon: '📁' },
+      length: { priority: 'medium', category: 'Length', icon: '📄' },
+    }
+
     const issues = analysis?.parsing?.validation?.issues || []
     const explicitWarnings = analysis?.warnings || []
     const warnings = issues.map((issue, index) => ({
@@ -178,13 +186,14 @@ export default function ResumeWarnings() {
       }
 
       warnings.push({
+        type: warning?.type,
         id: warning?.id || `warning-${index}`,
         title: warning?.title || warning?.message || 'Warning',
         message: warning?.message || '',
         suggestion: warning?.suggestion || '',
-        priority: warning?.priority || 'medium',
-        category: warning?.category || 'Warnings',
-        icon: warning?.icon || '⚠️',
+        priority: warning?.priority || warningTypeMap[warning?.type]?.priority || 'medium',
+        category: warning?.category || warningTypeMap[warning?.type]?.category || 'Warnings',
+        icon: warning?.icon || warningTypeMap[warning?.type]?.icon || '⚠️',
       })
     })
 

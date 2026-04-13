@@ -5,6 +5,7 @@ FastAPI routes for resume analysis using the integrated pipeline
 
 import re
 import os
+import json
 import tempfile
 from pathlib import Path
 from typing import Optional
@@ -20,6 +21,13 @@ from ..models.api_models import (
 from ..services.analyzer_pipeline import CompleteResumeAnalysis
 from ..services.jd_comparison import compare_with_jd
 from ..services.benchmark import run_real_world_benchmarks
+from ..services.role_profiles import (
+    detect_role,
+    get_role_profile,
+    detect_experience_level,
+    extract_experience_signals,
+    experience_level_score,
+)
 from ..utils.logger import logger, safe_execute, create_safe_response
 
 router = APIRouter()
@@ -45,7 +53,8 @@ SYNONYMS = {
     "ai": "machine learning",
 }
 
-STOPWORDS = {
+STOPWORDS = {"and", "or", "the", "a", "an", "with", "to", "for", "in", "on", "of"}
+
 
 def prioritize_missing(missing_skills):
     priority = [skill for skill in PRIORITY_SKILLS if skill in missing_skills]
@@ -59,51 +68,162 @@ def get_verdict(score):
     if score >= 50:
         return "Moderate Match"
     return "Low Match"
-    "and", "or", "the", "a", "an", "with", "to", "for", "in", "on", "of"
-}
-
-
-def extract_keywords(text: str):
-    text = normalize_text(text)
-    return [
-        skill for skill in COMMON_SKILLS
-        if _skill_in_text(skill, text)
-    missing = prioritize_missing([keyword for keyword in jd_keywords if keyword not in resume_skills])[:5]
-
-
-def extract_resume_skills(text: str):
-    text = normalize_text(text)
-    return [skill for skill in COMMON_SKILLS if _skill_in_text(skill, text)]
 
 
 def normalize_text(text: str):
-    text = text.lower()
-        "verdict": get_verdict(score),
-
+    text = (text or "").lower()
     for key, value in sorted(SYNONYMS.items(), key=lambda item: len(item[0]), reverse=True):
         text = re.sub(rf"\b{re.escape(key)}\b", value, text)
-
     return text
 
 
 def _skill_in_text(skill: str, text: str) -> bool:
     if " " in skill:
         return skill in text
-
     return re.search(rf"\b{re.escape(skill)}\b", text) is not None
 
 
-def match_resume_to_jd(resume_text: str, jd_text: str):
+def extract_keywords(text: str):
+    normalized = normalize_text(text)
+    return [skill for skill in COMMON_SKILLS if _skill_in_text(skill, normalized)]
+
+
+def extract_resume_skills(text: str):
+    normalized = normalize_text(text)
+    return [skill for skill in COMMON_SKILLS if _skill_in_text(skill, normalized)]
+
+
+def parse_role_data(raw_role_data: Optional[str]) -> dict:
+    if not raw_role_data:
+        return {}
+
+    try:
+        parsed = json.loads(raw_role_data)
+    except json.JSONDecodeError:
+        logger.warning("Invalid role_data payload received")
+        return {}
+
+    return parsed if isinstance(parsed, dict) else {}
+
+
+def normalize_role_skills(role_data: dict) -> list[str]:
+    skills_value = role_data.get("skills", "")
+    if isinstance(skills_value, list):
+        values = skills_value
+    else:
+        values = [item.strip() for item in str(skills_value).split(",")]
+
+    cleaned = []
+    for value in values:
+        normalized = value.strip().lower()
+        if normalized and normalized not in cleaned:
+            cleaned.append(normalized)
+
+    return cleaned
+
+
+def infer_required_level(experience_text: str) -> str:
+    text = (experience_text or "").lower()
+
+    if any(keyword in text for keyword in ["senior", "lead", "principal", "staff"]):
+        return "senior"
+    if any(keyword in text for keyword in ["junior", "entry", "fresher", "graduate"]):
+        return "junior"
+
+    years_match = re.search(r"(\d+(?:\.\d+)?)", text)
+    if years_match:
+        years = float(years_match.group(1))
+        if years <= 2:
+            return "junior"
+        if years <= 5:
+            return "mid"
+        return "senior"
+
+    return "mid"
+
+
+def build_role_prompt(role_data: dict, job_description: Optional[str], resume_text: str) -> str:
+    return f"""
+You are a recruiter.
+
+Role:
+{role_data.get('role', 'Not specified')}
+
+Experience Required:
+{role_data.get('experience', 'Not specified')}
+
+Work Type:
+{role_data.get('workType', 'Not specified')}
+
+Location:
+{role_data.get('location', 'Not specified')}
+
+Key Skills:
+{role_data.get('skills', 'Not specified')}
+
+Job Description:
+{job_description or 'Not provided'}
+
+Resume:
+{resume_text}
+
+Give a professional evaluation.
+""".strip()
+
+
+def build_role_context(role_data: dict, match_result: dict, job_description: Optional[str], resume_text: str) -> dict:
+    role_skills = normalize_role_skills(role_data)
+    role_type = detect_role(role_data.get("role", ""))
+    required_level = detect_experience_level(role_data.get("experience", ""))
+    signals = extract_experience_signals(resume_text)
+    prompt = build_role_prompt(role_data, job_description, resume_text)
+
+    score = match_result.get("match_score", 0)
+    if score >= 75:
+        review = "Strong alignment for the target role. The resume covers the core skills and reads like a credible recruiter-ready profile."
+    elif score >= 50:
+        review = "Moderate alignment for the target role. The resume shows a workable fit, but it would benefit from more role-specific proof and keyword coverage."
+    else:
+        review = "Low alignment for the target role. The resume needs more role-specific skills, stronger experience signals, and clearer tailoring before it would be competitive."
+
+    if role_skills:
+        review = f"{review} Target skills emphasized: {', '.join(role_skills[:6])}."
+
+    return {
+        "role": role_data.get("role", ""),
+        "experience": role_data.get("experience", ""),
+        "workType": role_data.get("workType", ""),
+        "location": role_data.get("location", ""),
+        "skills": role_skills,
+        "role_type": role_type,
+        "required_level": required_level,
+        "experience_level": required_level,
+        "experience_signals": signals,
+        "professional_review": review,
+        "analysis_prompt": prompt,
+    }
+
+
+def match_resume_to_jd(resume_text: str, jd_text: str, role_data: Optional[dict] = None):
+    role_type = detect_role((role_data or {}).get("role", ""))
+    profile = get_role_profile(role_type)
+    experience_level = detect_experience_level((role_data or {}).get("experience", ""))
+    signals = extract_experience_signals(resume_text)
+
     resume_text = normalize_text(resume_text)
     jd_text = normalize_text(jd_text)
 
     jd_keywords = extract_keywords(jd_text)
+    jd_keywords.extend(profile.get("skills", []))
+    if role_data:
+        jd_keywords.extend(normalize_role_skills(role_data))
+        jd_keywords = list(dict.fromkeys(jd_keywords))
     resume_skills = extract_resume_skills(resume_text)
 
     matched = [skill for skill in resume_skills if skill in jd_keywords]
     missing = [keyword for keyword in jd_keywords if keyword not in resume_skills][:5]
 
-    score = calculate_match_score(matched, jd_keywords)
+    score, breakdown = calculate_match_score(resume_text, jd_text, matched, jd_keywords, profile, experience_level, signals)
     confidence = "High" if len(matched) >= 4 else "Medium" if len(matched) >= 2 else "Low"
 
     return {
@@ -111,6 +231,10 @@ def match_resume_to_jd(resume_text: str, jd_text: str):
         "matched_skills": matched,
         "missing_skills": missing,
         "confidence": confidence,
+        "role_type": role_type,
+        "experience_level": experience_level,
+        "experience_signals": signals,
+        "breakdown": breakdown,
     }
 
 
@@ -124,34 +248,126 @@ def generate_suggestions(missing_skills):
 
     if not missing_skills:
         suggestions.append("Great match! Consider improving formatting and clarity.")
-            result["verdict"] = match_result["verdict"]
 
     return suggestions
 
 
-def calculate_match_score(matched, jd_keywords):
+def calculate_match_score(resume_text, jd_text, matched, jd_keywords, profile, experience_level, signals):
     if not jd_keywords:
-        return 0
-            result["verdict"] = "Low Match"
+        return 0, {
+            "skills": 0,
+            "keywords": 0,
+            "experience": 0,
+            "quality": 0,
+            "format": 0,
+        }
 
-    base_score = (len(matched) / len(jd_keywords)) * 100
+    skill_score = (len(matched) / len(jd_keywords)) * 100
 
-    if len(matched) >= 3:
-        base_score += 10
+    tokens = normalize_text(resume_text).split()
+    token_count = max(len(tokens), 1)
+    keyword_hits = sum(normalize_text(resume_text).count(skill) for skill in jd_keywords)
+    density = keyword_hits / token_count
+    if density > 0.05:
+        keyword_score = 100.0
+    elif density > 0.02:
+        keyword_score = 70.0
+    else:
+        keyword_score = 40.0
 
-    return min(int(base_score), 100)
+    text = normalize_text(resume_text)
+    experience_score = float(experience_level_score(experience_level, signals))
+
+    quality_score = 100.0
+    if any(word in text for word in ["worked", "helped", "did"]):
+        quality_score -= 20
+    if not re.search(r"\d", resume_text):
+        quality_score -= 20
+    if len(resume_text.split()) < 200:
+        quality_score -= 20
+    quality_score = max(quality_score, 0)
+
+    format_score = 0.0
+    if "education" in text:
+        format_score += 25
+    if "experience" in text:
+        format_score += 25
+    if "project" in text:
+        format_score += 25
+    if "skills" in text:
+        format_score += 25
+
+    weights = profile.get("weights", {})
+    weighted_total = (
+        skill_score * weights.get("skills", 0.4)
+        + keyword_score * weights.get("keywords", 0.2)
+        + experience_score * weights.get("experience", 0.15)
+        + quality_score * weights.get("quality", 0.15)
+        + format_score * weights.get("format", 0.1)
+    )
+
+    return min(int(round(weighted_total)), 100), {
+        "skills": round(skill_score),
+        "keywords": round(keyword_score),
+        "experience": round(experience_score),
+        "quality": round(quality_score),
+        "format": round(format_score),
+    }
+
+
+def experience_level_warnings(level: str, signals: dict) -> list[str]:
+    warnings = []
+
+    if level == "junior" and not signals.get("has_projects"):
+        warnings.append("Add at least 2 projects to strengthen your profile")
+    if level == "mid" and not signals.get("has_numbers"):
+        warnings.append("Add measurable impact (e.g., improved performance by 30%)")
+    if level == "senior" and not signals.get("has_leadership"):
+        warnings.append("Highlight leadership or ownership experience")
+
+    return warnings
+
+
+def calculate_interview_probability(final_score: int, missing_skills: list[str], warnings: list[dict], level: str) -> dict:
+    penalty = 0
+
+    if len(missing_skills) >= 5:
+        penalty += 15
+    elif len(missing_skills) >= 3:
+        penalty += 10
+
+    penalty += len(warnings) * 2
+
+    if level == "senior":
+        penalty += 5
+
+    adjusted_score = max(0, int(final_score) - penalty)
+
+    if adjusted_score >= 80:
+        label = "High"
+    elif adjusted_score >= 60:
+        label = "Medium"
+    else:
+        label = "Low"
+
+    return {
+        "score": adjusted_score,
+        "label": label,
+    }
 
 
 @router.post("/analyze", response_model=ResumeAnalysisResponse)
 async def upload_and_analyze_resume(
     file: UploadFile = File(...),
-    job_description: Optional[str] = Form(None, description="Optional job description for comparison")
+    job_description: Optional[str] = Form(None, description="Optional job description for comparison"),
+    role_data: Optional[str] = Form(None, description="Structured role details for targeted analysis")
 ) -> ResumeAnalysisResponse:
     """
     STEP 7: Upload and analyze resume
     Single endpoint that handles the complete analysis pipeline
     """
     logger.info(f"Received resume upload request: {file.filename}")
+    parsed_role_data = parse_role_data(role_data)
 
     # Validate file type
     allowed_extensions = {'.pdf', '.docx', '.txt'}
@@ -178,13 +394,38 @@ async def upload_and_analyze_resume(
 
         if job_description:
             resume_text = result.get("raw_text", "")
-            match_result = match_resume_to_jd(resume_text, job_description)
+            match_result = match_resume_to_jd(resume_text, job_description, role_data=parsed_role_data)
+            role_context = build_role_context(parsed_role_data, match_result, job_description, resume_text) if parsed_role_data else {}
             result["success"] = True
             result["match_score"] = match_result["match_score"]
             result["matched_skills"] = match_result["matched_skills"]
             result["missing_skills"] = match_result["missing_skills"]
             result["suggestions"] = generate_suggestions(match_result["missing_skills"])
             result["confidence"] = match_result["confidence"]
+            result["breakdown"] = match_result.get("breakdown", {})
+            result["experience_level"] = match_result.get("experience_level", detect_experience_level(parsed_role_data.get("experience", "")))
+            result["experience_signals"] = match_result.get("experience_signals", extract_experience_signals(resume_text))
+            extra_warnings = experience_level_warnings(result["experience_level"], result["experience_signals"])
+            result["warnings"] = [
+                {
+                    "type": "experience",
+                    "message": warning,
+                    "priority": "high",
+                }
+                for warning in extra_warnings
+            ]
+            if extra_warnings:
+                result["suggestions"] = [*result["suggestions"], *extra_warnings]
+            result["interview_probability"] = calculate_interview_probability(
+                final_score=result.get("match_score", 0),
+                missing_skills=result.get("missing_skills", []),
+                warnings=result.get("warnings", []),
+                level=result.get("experience_level", "mid"),
+            )
+            result["role_data"] = parsed_role_data
+            result["role_context"] = role_context
+            result["job_description_provided"] = True
+            result["verdict"] = get_verdict(match_result["match_score"])
         else:
             result["success"] = True
             result["match_score"] = 0
@@ -192,6 +433,15 @@ async def upload_and_analyze_resume(
             result["missing_skills"] = []
             result["suggestions"] = []
             result["confidence"] = "Low"
+            result["warnings"] = []
+            result["interview_probability"] = {
+                "score": 0,
+                "label": "Low",
+            }
+            result["role_data"] = parsed_role_data
+            result["role_context"] = build_role_context(parsed_role_data, {"match_score": 0}, None, result.get("raw_text", "")) if parsed_role_data else {}
+            result["job_description_provided"] = False
+            result["verdict"] = "Low Match"
 
         # Clean up temp file
         os.unlink(temp_file_path)

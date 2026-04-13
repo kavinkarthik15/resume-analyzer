@@ -1,34 +1,17 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAnalysis } from '../context/AnalysisContext'
 
 export default function History() {
   const navigate = useNavigate()
-  const [items, setItems] = React.useState([])
-
-  React.useEffect(() => {
-    const stored = localStorage.getItem('analysisHistory')
-    if (!stored) {
-      setItems([])
-      return
-    }
-
-    try {
-      const parsed = JSON.parse(stored)
-      setItems(Array.isArray(parsed) ? parsed : [])
-    } catch {
-      setItems([])
-    }
-  }, [])
+  const { history, setAnalysisResult, clearHistory } = useAnalysis()
 
   function handleView(item) {
-    sessionStorage.setItem('resumeAnalysis', JSON.stringify(item.analysisResult))
-    navigate('/results', { state: { analysisResult: item.analysisResult } })
+    setAnalysisResult(item.result)
+    navigate('/results')
   }
 
-  function clearHistory() {
-    localStorage.removeItem('analysisHistory')
-    setItems([])
-  }
+  const items = history
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#07102a] via-[#0f2b4f] to-[#0b0620] text-white pt-24 px-6 pb-10">
@@ -49,8 +32,15 @@ export default function History() {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div>
                     <p className="text-lg font-semibold">{item.fileName || 'Resume'}</p>
-                    <p className="text-sm text-slate-300">{item.timestamp}</p>
-                    <p className="text-sm text-slate-200 mt-1">ATS: {item.analysisResult?.ats_score ?? 0}/100</p>
+                    <p className="text-sm text-slate-300">{new Date(item.date).toLocaleString()}</p>
+                    <p className="text-sm text-slate-200 mt-1">
+                      Score: {item.result?.match_score ?? item.result?.score ?? item.result?.ats_analysis?.score ?? 0}%
+                    </p>
+                    {item.jobDescription && (
+                      <p className="text-xs text-slate-400 mt-1">
+                        JD: {item.jobDescription.slice(0, 120)}{item.jobDescription.length > 120 ? '...' : ''}
+                      </p>
+                    )}
                   </div>
                   <button onClick={() => handleView(item)} className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-105 transform transition font-semibold">
                     View Result

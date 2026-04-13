@@ -2,7 +2,9 @@ import axios from 'axios';
 
 const rawApiUrl =
   import.meta.env.VITE_API_URL ||
-  'https://resume-analyzer-nvqc.onrender.com';
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000'
+    : 'https://resume-analyzer-nvqc.onrender.com');
 
 const apiRoot = rawApiUrl
   .replace(/\/+$/, '')
@@ -41,11 +43,18 @@ api.interceptors.response.use(
 
 export const resumeAPI = {
   // Upload and analyze resume
-  uploadAndAnalyze: (file, jobDescription = null) => {
+  uploadAndAnalyze: (file, payload = null) => {
+    const isObjectPayload = payload && typeof payload === 'object' && !Array.isArray(payload)
+    const jobDescription = isObjectPayload ? payload.job_description ?? payload.jobDescription ?? null : payload
+    const roleData = isObjectPayload ? payload.role_data ?? payload.roleData ?? null : null
+
     const formData = new FormData();
     formData.append('file', file);
     if (jobDescription) {
       formData.append('job_description', jobDescription);
+    }
+    if (roleData) {
+      formData.append('role_data', JSON.stringify(roleData));
     }
     return api.post('/analyze', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -72,6 +81,10 @@ export const jobAPI = {
   compareRoles: (request) => api.post('/compare-roles', request),
 };
 
+export const jdAPI = {
+  generate: (roleData) => api.post('/generate-jd', roleData),
+};
+
 export const chatAPI = {
   chat: (request) => api.post('/chat', request),
   rewriteBullets: (request) => api.post('/rewrite-bullets', request),
@@ -82,7 +95,21 @@ export const mlAPI = {
 };
 
 export const rewriteAPI = {
-  rewriteResume: (text) => api.post('/rewrite', { text }),
+  rewriteResume: async (payload) => {
+    const requestBody =
+      payload && typeof payload === 'object' && !Array.isArray(payload)
+        ? payload
+        : { text: payload };
+
+    try {
+      return await api.post('/rewrite', requestBody);
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        return api.post('/api/rewrite', requestBody);
+      }
+      throw error;
+    }
+  },
 };
 
 export default api;
