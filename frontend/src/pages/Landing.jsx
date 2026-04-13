@@ -229,13 +229,13 @@ export default function Landing(){
                   placeholder="Role (e.g. Frontend Developer)"
                   value={roleData.role}
                   onChange={(e) => setRoleData((prev) => ({ ...prev, role: e.target.value }))}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300"
                 />
                 <input
                   placeholder="Experience (e.g. 2+ years)"
                   value={roleData.experience}
                   onChange={(e) => setRoleData((prev) => ({ ...prev, experience: e.target.value }))}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300"
                 />
                 <select
                   value={roleData.workType}
@@ -251,13 +251,13 @@ export default function Landing(){
                   placeholder="Location (optional)"
                   value={roleData.location}
                   onChange={(e) => setRoleData((prev) => ({ ...prev, location: e.target.value }))}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300"
                 />
                 <input
                   placeholder="Key Skills (comma separated)"
                   value={roleData.skills}
                   onChange={(e) => setRoleData((prev) => ({ ...prev, skills: e.target.value }))}
-                  className="w-full sm:col-span-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                  className="w-full sm:col-span-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300"
                 />
               </div>
             </div>
@@ -271,7 +271,7 @@ export default function Landing(){
                 onChange={(e) => setJobDescription(e.target.value)}
                 placeholder="Paste the job description here..."
                 rows={6}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300"
               />
             </div>
 
